@@ -51,20 +51,20 @@ list_of_b_values = zeros(length(number_of_b_values),max(number_of_b_values));
 
 for h=1:length(number_of_b_values)
 
+        
+    %% b-value optimization  
+    [b_values] = optimizeBscale([frac_fastOpt diff_fast; frac_medOpt diff_med; frac_slowOpt diff_slow],number_of_b_values(h));
     
-%% b-value optimization  
-[b_values] = optimizeBscale([frac_fastOpt diff_fast; frac_medOpt diff_med; frac_slowOpt diff_slow],number_of_b_values(h));
-
-list_of_b_values(h,1:length(b_values)) = b_values;
-
-%% Generate NNLS space of values
-A = exp( -kron(b_values',1./ADCBasis));
-A_fix = exp( -kron(b_values',1./ADCBasis_fix));
-
-
-%% Generate Tri-exponential
-SI =  ((1-frac_med-frac_fast)*exp(-b_values*diff_slow)+frac_med*exp(-b_values*diff_med)+frac_fast*exp(-b_values*diff_fast));
-noiseLevel = SI(1)./SNR;
+    list_of_b_values(h,1:length(b_values)) = b_values;
+    
+    %% Generate NNLS space of values
+    A = exp( -kron(b_values',1./ADCBasis));
+    A_fix = exp( -kron(b_values',1./ADCBasis_fix));
+    
+    
+    %% Generate Tri-exponential
+    SI =  ((1-frac_med-frac_fast)*exp(-b_values*diff_slow)+frac_med*exp(-b_values*diff_med)+frac_fast*exp(-b_values*diff_fast));
+    noiseLevel = SI(1)./SNR;
     for k=1:numOfSimulations
     %% Create Syntetic Data: Perfect data + rician noise
         for i=1:size(noiseLevel,2)
@@ -132,15 +132,15 @@ toc
             resultsPeaks(5,h,j,m) = NaN;
             resultsPeaks(6,h,j,m) = NaN;
             end
-
         end
     end
-toc    
-    %% display how many selection of b-values are needed
-    number_of_b_valuesDONE =number_of_b_valuesDONE+1;
-    length(number_of_b_values)-number_of_b_valuesDONE
-    save(['steps300_sim500_increasedTubuli_unres' datestr(now) '.mat'])
-    %toc./60
+    
+    toc    
+        %% display how many selection of b-values are needed
+        number_of_b_valuesDONE =number_of_b_valuesDONE+1;
+        length(number_of_b_values)-number_of_b_valuesDONE
+        save(['steps300_sim500_increasedTubuli_unres' datestr(now) '.mat'])
+        %toc./60
 end
 
 

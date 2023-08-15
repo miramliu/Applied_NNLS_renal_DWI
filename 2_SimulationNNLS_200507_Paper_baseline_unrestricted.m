@@ -7,7 +7,9 @@ tic
 smallreal=double(realmin('single')).^2;
 
 % numOfSimulations = 100;
-number_of_b_valuesDONE=0; %variable used to check the progress of the simulation ----------TG: should be 0 in the beginning
+numOfSimulations = 1; %ML test
+number_of_b_values = 9 %ML test
+%number_of_b_valuesDONE=0; %variable used to check the progress of the simulation ----------TG: should be 0 in the beginning
 %% Diffusion Parameters (Baseline)
 diff_fast   = 0.180;
 diff_med    = 0.0058; %[0.006 0.007 0.008 0.009 0.010];
