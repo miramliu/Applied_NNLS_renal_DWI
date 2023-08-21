@@ -9,6 +9,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     addpath ../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../Applied_NNLS_renal_DWI/rNNLS
 
+
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
     b_values = [0,10,30,50,80,120,200,400,800];
@@ -26,7 +27,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-
+    ROItype = [PatientNum '_' ROItype];
     SignalInput = ReadPatientDWIData(PatientNum, ROItype);
 
     %% try to git them with NNLS
@@ -56,7 +57,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
     ExcelFileName=[pathtodata, '/','PN_IVIM_Lesion_DiffusionSpectra.xlsx']; % All results will save in excel file
 
-    Identifying_Info = {PatientNum, ROItype};
+    Identifying_Info = {['PN_' PatientNum], ROItype};
     Existing_Data = readcell(ExcelFileName,'Range','A:B'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));

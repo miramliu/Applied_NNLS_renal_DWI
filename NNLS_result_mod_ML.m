@@ -6,13 +6,13 @@
 
 function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML( TempAmplitudes, ADCBasis )
 
-    [locsMax, pksMax]=peakseek(TempAmplitudes,1,realmin);
-    [locsMin, pksMin]=peakseek(-TempAmplitudes-(min(-TempAmplitudes)));
+    [locsMax, pksMax]=peakseekTG(TempAmplitudes,1,realmin);
+    [locsMin, pksMin]=peakseekTG(-TempAmplitudes-(min(-TempAmplitudes)));
     
     peaksMax = locsMax(pksMax ~= 0);
     pksMax = pksMax(pksMax ~= 0);
     if length(peaksMax) < 2.5 % try to find peaks in curvature
-      [locsMax, pksMax]=peakseek(-diff(diff(TempAmplitudes)),1,realmin);
+      [locsMax, pksMax]=peakseekTG(-diff(diff(TempAmplitudes)),1,realmin);
       peaksMax = locsMax(pksMax ~= 0);
       pksMax = TempAmplitudes(peaksMax);
     end
