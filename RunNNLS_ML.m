@@ -2,6 +2,9 @@
 
 function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
 
+    addpath ../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
+    addpath ../Applied_NNLS_renal_DWI/rNNLS
+
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
     b_values = [0,10,30,50,80,120,200,400,800];
@@ -70,6 +73,7 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
             SignalInput =  SignalInput + ROITypeTablesub.RoiMean;
         end
     end
+    SignalInput = SignalInput./SignalInput(1); %normalize to b0
 
 end
 
