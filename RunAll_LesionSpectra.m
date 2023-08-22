@@ -1,3 +1,4 @@
+
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P001','Lesion1');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P002','Lesion1');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P003','Lesion1');
@@ -16,7 +17,8 @@
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P016','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P017','LK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P018','RK_Lesion');
-[~,~,~,~,~] = RunNNLS_ML_Lesion('P019','RK_Lesion');
+%[~,~,~,~,~] = RunNNLS_ML_Lesion('P019','RK_Lesion');
+
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P020','LK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P021','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P022','RK_Lesion');
@@ -24,6 +26,7 @@
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P025','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P026','LK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P027','PK_Lesion');
+
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P028','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P029','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P030','LK_Lesion');
@@ -34,6 +37,7 @@
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P036','LK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P037','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P038','RK_Lesion');
+%}
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P039','LK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P040','RK_Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P042','LK_Lesion');
