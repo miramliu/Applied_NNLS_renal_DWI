@@ -8,3 +8,9 @@ RunNNLS_ML uses the code provided to do NNLS of data collected from partial neph
 
 an example of a run would be 
     >> [OutputDiffusionSpectrum, Chi, Resid,y_recon,Peaks] = RunNNLS_ML('P007','P007_LK_LP_C');
+
+RunNNLS_ML_Lesion uses the code provided to get the overall diffusion spectrum of a volume of a lesion
+Example run: 
+    >> [OutputDiffusionSpectrum, Chi, Resid,y_recon,Peaks] = RunNNLS_ML_Lesion('P019','RK_Lesion');
+
+RunAll_LesionSpectra can be run to run all of the lesions from p001 = p044 to be output into an xslx file for analysis. 
