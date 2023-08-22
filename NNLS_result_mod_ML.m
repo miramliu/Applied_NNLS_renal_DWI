@@ -11,7 +11,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
     
     peaksMax = locsMax(pksMax ~= 0);
     pksMax = pksMax(pksMax ~= 0);
-    if length(peaksMax) < 2.5 % try to find peaks in curvature
+    if length(peaksMax) < 2 % try to find peaks in curvature
       [locsMax, pksMax]=peakseekTG(-diff(diff(TempAmplitudes)),1,realmin);
       peaksMax = locsMax(pksMax ~= 0);
       pksMax = TempAmplitudes(peaksMax);
@@ -34,48 +34,54 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
         if isempty(Peak2End)
             [locsMinCurv, pksMinCurv]=peakseekTG(diff(diff(TempAmplitudes)));% Try to find mimimum in Curvature
             Peak2End = locsMinCurv(locsMinCurv > peaksMax(2));
-
         end
+        %% for case 0019
+        %{
+        if Peak2End == Peak1End %if they're equal, just one weird case
+            [locsMax, pksMax]=peakseekTG(TempAmplitudes,1,realmin);
+            peaksMax = locsMax(pksMax ~= 0); %go with the original 
+        end
+        %}
     end
     
     TotalArea = sum(TempAmplitudes);
     
-            range1 = 1:Peak1End(1); %ADCBasis >= ADCBasis(1)  &  ADCBasis < ADCBasis(Peak1End(1)+1);
-            
-            ADCBasisRange1 = ADCBasis(range1);
-            ADCampsRange1 = TempAmplitudes(range1);
-            RegionFraction1 = sum( ADCampsRange1 ) / TotalArea;
-            
-            ADCwidth1 = ADCBasisRange1(ADCampsRange1 >= pksMax(1)./2);
-            ADCwidth1 = 1./ADCwidth1(1) - 1./ADCwidth1(end);
-            
-            GeoMeanRegionADC_1 = (1./ exp( dot( ADCampsRange1, log( ADCBasisRange1 ) ) ./ ( RegionFraction1*TotalArea ) )).*1000;
+    range1 = 1:Peak1End(1); %ADCBasis >= ADCBasis(1)  &  ADCBasis < ADCBasis(Peak1End(1)+1);
     
-     if length(peaksMax) > 1 %if there's more than just 1 peak)
+    ADCBasisRange1 = ADCBasis(range1);
+    ADCampsRange1 = TempAmplitudes(range1);
+    RegionFraction1 = sum( ADCampsRange1 ) / TotalArea;
     
-            range2 = (Peak1End(1)+1):Peak2End(1); %ADCBasis >= ADCBasis(Peak1End(1)+1)  &  ADCBasis < ADCBasis(Peak2End(1)+1);
-            
-            ADCBasisRange2 = ADCBasis(range2);
-            ADCampsRange2 = TempAmplitudes(range2);
-            RegionFraction2 = sum( ADCampsRange2 ) / TotalArea;
-            
-            ADCwidth2 = ADCBasisRange2(ADCampsRange2 >= pksMax(2)./2);
-            if isempty(ADCwidth2)
+    ADCwidth1 = ADCBasisRange1(ADCampsRange1 >= pksMax(1)./2);
+    ADCwidth1 = 1./ADCwidth1(1) - 1./ADCwidth1(end);
     
-            else
-              ADCwidth2 = 1./ADCwidth2(1) - 1./ADCwidth2(end);
-            end
-            
-            GeoMeanRegionADC_2 = (1./exp( dot( ADCampsRange2, log( ADCBasisRange2 ) ) ./ ( RegionFraction2*TotalArea ) )).*1000;
-     else
+    GeoMeanRegionADC_1 = (1./ exp( dot( ADCampsRange1, log( ADCBasisRange1 ) ) ./ ( RegionFraction1*TotalArea ) )).*1000;
+
+    if length(peaksMax) > 1 %if there's more than just 1 peak)
+    %peak 2
+        range2 = (Peak1End(1)+1):Peak2End(1); %ADCBasis >= ADCBasis(Peak1End(1)+1)  &  ADCBasis < ADCBasis(Peak2End(1)+1);
+        
+        ADCBasisRange2 = ADCBasis(range2);
+        ADCampsRange2 = TempAmplitudes(range2);
+        RegionFraction2 = sum( ADCampsRange2 ) / TotalArea;
+        
+        ADCwidth2 = ADCBasisRange2(ADCampsRange2 >= pksMax(2)./2);
+        if isempty(ADCwidth2)
+
+        else
+          ADCwidth2 = 1./ADCwidth2(1) - 1./ADCwidth2(end);
+        end
+        
+        GeoMeanRegionADC_2 = (1./exp( dot( ADCampsRange2, log( ADCBasisRange2 ) ) ./ ( RegionFraction2*TotalArea ) )).*1000;
+    else
         disp('no 2nd peak')
         %set to zero
         GeoMeanRegionADC_2 = 0;
         RegionFraction2 = 0;
-        
-     end
     
-     if length(peaksMax) > 2
+    end
+    
+    if length(peaksMax) > 2
      %Peak3
             range3 = (Peak2End(1)+1):length(ADCBasis); %ADCBasis >= ADCBasis(Peak2End(1)+1)  &  ADCBasis < ADCBasis(end);
             
