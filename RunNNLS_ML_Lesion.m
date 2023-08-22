@@ -8,7 +8,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     addpath ../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../Applied_NNLS_renal_DWI/rNNLS
-
+    disp(PatientNum)
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
@@ -43,7 +43,8 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     Chi = resnorm;
     Resid = resid;
 
-    plot(OutputDiffusionSpectrum)
+    %plot(OutputDiffusionSpectrum)
+    %pause()
 
     [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
@@ -53,6 +54,35 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     resultsPeaks(5) = GeoMeanRegionADC_2; %(diff_med - GeoMeanRegionADC_2./1000)./diff_med.*100;
     resultsPeaks(6) = GeoMeanRegionADC_3; %(diff_slow - GeoMeanRegionADC_3./1000)./diff_slow.*100;
 
+    %% generating the different components based on Gladytz et al
+    %Dblood ~ 180
+    %Dtubule ~ 5.8
+    %Dtissue ~ 1.5
+    %so gonna say there are < 3 peaks, to then split them up as fast if > 10, med if 10 > x > 2, and slow if < 2? 
+    
+    if nnz(~resultsPeaks) > 0 
+        dummyresultspeaks = resultsPeaks;
+        idx = find(resultsPeaks);
+        correctthese = idx(idx>3); %get the diffusion coefficients that are not zero
+        for k =1:numel(correctthese) %for the diffusion coefficients that need to be shuffed appropriately
+            j = correctthese(k);
+            n = DetermineComponent(resultsPeaks(j)); %see the speed of this peak
+            if n ~= j-3 %if it needs to be moved to a different speed fraction
+                %move to the correct fraction
+                dummyresultspeaks(n) = resultsPeaks(j-3);
+                dummyresultspeaks(n+3) = resultsPeaks(j);
+                %make the one it was moved from zero now
+                if dummyresultspeaks(j-3) == resultsPeaks(j-3) %if it has NOT been replaced by a prevoius move 
+                    dummyresultspeaks(j-3) = 0; %set to zero
+                    dummyresultspeaks(j) = 0;
+                end
+                
+            end
+            %pause()
+        end
+        resultsPeaks = dummyresultspeaks;
+    end
+    
 
     pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
     ExcelFileName=[pathtodata, '/','PN_IVIM_Lesion_DiffusionSpectra.xlsx']; % All results will save in excel file
@@ -105,5 +135,20 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
         SignalInput = SignalInput./SignalInput(1); %normalize to b0
     end
     
+end
+
+%so gonna say there are < 3 peaks, to then split them up as fast if > 10, med if 10 > x > 2, and slow if < 2? 
+function n = DetermineComponent(value)
+    if value >= 10
+        n = 1;
+    elseif value < 10 
+        if value > 4 
+            n = 2;
+        else
+            n = 3;
+        end
+    elseif isnan(value) 
+        error('Nan')
+    end
 end
 
