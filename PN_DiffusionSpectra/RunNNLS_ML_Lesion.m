@@ -6,8 +6,8 @@
 
 function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_ML_Lesion(PatientNum,ROItype)
 
-    addpath ../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
-    addpath ../Applied_NNLS_renal_DWI/rNNLS
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS
     disp(PatientNum)
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));

@@ -2,8 +2,9 @@
 
 function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
 
-    addpath ../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
-    addpath ../Applied_NNLS_renal_DWI/rNNLS
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS
+    disp(PatientNum)
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
@@ -22,7 +23,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-
+    ROItype = [PatientNum '_' ROItype];
     SignalInput = ReadPatientDWIData(PatientNum, ROItype);
 
     %% try to git them with NNLS
@@ -35,10 +36,12 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     %% output renaming, just to stay consistent with the TG&JP code
     OutputDiffusionSpectrum = amplitudes;
+    %plot(OutputDiffusionSpectrum);
+    %pause(1)
     Chi = resnorm;
     Resid = resid;
 
-    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod(OutputDiffusionSpectrum, ADCBasis);
+    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
     resultsPeaks(2) = RegionFraction2; %(frac_med - RegionFraction2)./frac_med.*100;
     resultsPeaks(3) = RegionFraction3; %(frac_slow - )./frac_slow.*100;
@@ -56,13 +59,12 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     
     %read data
-    DataFrame = readtable(pathtoCSV,'VariableNamingRule','preserve', 'Range','A:E');
+    DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');    
     ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);
-
     SignalInput = zeros(9,1);
     %average all four ROIs for analysis (CHECK IF I SHOULD DO THIS)
     for k = 1:4 %for each of the 4 ROIs of every type (%%CHECK!!!!!!)
-        ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype + string(k)),:); %so for example you want LK_LP_C, will check LK_LP_C1, LK_LP_C2 etc.
+        ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype + string(k)),:) %so for example you want LK_LP_C, will check LK_LP_C1, LK_LP_C2 etc.
         
         % also make sure b-values are in order
         if ROITypeTablesub.Dynamic == [0;1;2;3;4;5;6;7;8]
