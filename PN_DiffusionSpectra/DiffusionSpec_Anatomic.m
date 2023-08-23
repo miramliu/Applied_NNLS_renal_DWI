@@ -21,7 +21,7 @@ for i = 1:length(RoiTypes)
     %plot(OutputDiffusionSpectrum);
     %pause(1)
 
-    pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
+    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
     ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], ROItype};

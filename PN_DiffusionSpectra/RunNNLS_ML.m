@@ -55,7 +55,7 @@ end
 % to be able to get the data for the DWI analysis... hopefully.
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
-    pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export/';
+    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     
     %read data
@@ -64,7 +64,7 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
     SignalInput = zeros(9,1);
     %average all four ROIs for analysis (CHECK IF I SHOULD DO THIS)
     for k = 1:4 %for each of the 4 ROIs of every type (%%CHECK!!!!!!)
-        ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype + string(k)),:) %so for example you want LK_LP_C, will check LK_LP_C1, LK_LP_C2 etc.
+        ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype + string(k)),:); %so for example you want LK_LP_C, will check LK_LP_C1, LK_LP_C2 etc.
         
         % also make sure b-values are in order
         if ROITypeTablesub.Dynamic == [0;1;2;3;4;5;6;7;8]
