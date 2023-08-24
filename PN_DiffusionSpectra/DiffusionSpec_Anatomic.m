@@ -33,7 +33,7 @@ for i = 1:length(RoiTypes)
         disp('saving data in excel')
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),Resid};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','Original',WriteMode','append')
     end
 
 end
