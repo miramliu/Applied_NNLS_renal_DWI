@@ -12,20 +12,7 @@ function RecompartmentalizeExcel()
     for j = 1:size(Table,1)
         Identifying_Info = Table(j,1:2);
 
-        disp(j)
-        try
-            resultsPeaks = cell2mat(Table(j,3:8));
-        catch
-            %check for missing values and set to zero
-            dummy = Table(j,3:8);
-            for i = 1:6
-                if strcmp(class(dummy{i}),'missing')
-                    dummy{i} = 0;
-                end
-            end
-            resultsPeaks = cell2mat(dummy);
-        end
-
+        resultsPeaks = Table{j,3:8};
         if nnz(~resultsPeaks) > 0 
             resultsPeaks = RecompartmentalizeMultiexponential(resultsPeaks);
         end
@@ -36,11 +23,12 @@ function RecompartmentalizeExcel()
     
         if sum(idx)==0
             disp('saving data in excel')
-            dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6)};
+            dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),OutputDiffusionSpectrum};
             Export_Cell = [Identifying_Info,dataarray];
             writecell(Export_Cell,ExcelFileName,'Sheet', 'Recompartmentalized','WriteMode','append')
         end
 
+        disp
     end
 
     
