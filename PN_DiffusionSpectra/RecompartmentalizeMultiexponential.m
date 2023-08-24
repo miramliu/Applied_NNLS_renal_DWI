@@ -25,7 +25,6 @@ function dummyresultspeaks = RecompartmentalizeMultiexponential(resultsPeaks)
         end
         %pause()
     end
-    resultsPeaks = dummyresultspeaks;
 end
 
 %so gonna say there are < 3 peaks, to then split them up as fast if > 10, med if 10 > x > 2, and slow if < 2? 

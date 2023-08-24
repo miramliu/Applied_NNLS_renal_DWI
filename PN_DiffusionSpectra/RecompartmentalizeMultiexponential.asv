@@ -1,0 +1,15 @@
+%% bulky code to recomparmentalize multi-exponential
+% the original sheet is just the standard output
+% will then sort into the 3 components based on limits/compartmentalization
+% based on the diffusion coefficient
+
+function RecompartmentalizeMultiexponential()
+    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
+    ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
+
+    Table = readcell(ExcelFileName, 'Sheet','Original');
+
+    
+
+
+end
