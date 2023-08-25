@@ -1,6 +1,6 @@
 % Input: 
 
-function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
@@ -26,6 +26,9 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     ROItype = [PatientNum '_' ROItype];
     SignalInput = ReadPatientDWIData(PatientNum, ROItype);
 
+    %to match bi-exp, normalizing to b0
+    SignalInput = SignalInput(:)/SignalInput(1);
+
     %% try to git them with NNLS
     [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
     
@@ -33,6 +36,14 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     resnorm(:) = TempResnorm';
     resid(1:length(TempResid)) = TempResid';
     y_recon(1:size(A,1)) = A * TempAmplitudes;
+
+    % to match r^2 from bi-exp, check w/ octavia about meaning of this 
+    SSResid = sum(resid.^2);
+    SStotal = (length(b_values)-1) * var(SignalInput);
+    rsq = 1 - SSResid/SStotal; 
+
+    
+
 
     %% output renaming, just to stay consistent with the TG&JP code
     OutputDiffusionSpectrum = amplitudes;

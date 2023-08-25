@@ -11,6 +11,7 @@ function RecompartmentalizeExcel()
 
     for j = 1:size(Table,1)
         Identifying_Info = Table(j,1:2);
+        %rsq = Table(j,9);
 
         disp(j)
         try

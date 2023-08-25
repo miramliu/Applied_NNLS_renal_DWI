@@ -16,7 +16,7 @@ RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C
 for i = 1:length(RoiTypes)
     ROItype = RoiTypes{i}
 
-    [~, ~, Resid, ~, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype);
+    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype);
 
     %plot(OutputDiffusionSpectrum);
     %pause(1)
@@ -31,9 +31,9 @@ for i = 1:length(RoiTypes)
 
     if sum(idx)==0
         disp('saving data in excel')
-        dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),Resid};
+        dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'Sheet','Original',WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','Original','WriteMode','append')
     end
 
 end
