@@ -25,7 +25,8 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     ROItype = [PatientNum '_' ROItype];
     %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-    SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
+    SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+    %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
 
     %to match bi-exp, normalizing to b0
     SignalInput = SignalInput(:)/SignalInput(1);

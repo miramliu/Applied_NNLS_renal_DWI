@@ -32,9 +32,14 @@ for i = 1:length(RoiTypes)
     %plot(OutputDiffusionSpectrum);
     %pause(1)
 
+
+    % for baseline 
+    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
+    ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
+
     % for 3mo
-    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export_3mo';
-    ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra_3mo.xlsx']; % All results will save in excel file
+    %pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export_3mo';
+    %ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra_3mo.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], ROItype};
     Existing_Data = readcell(ExcelFileName,'Range','A:B'); %read only identifying info that already exists
