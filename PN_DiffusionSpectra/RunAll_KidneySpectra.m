@@ -36,8 +36,9 @@ DiffusionSpec_Anatomic('P034')
 %DiffusionSpec_Anatomic('P035')
 %}
 DiffusionSpec_Anatomic('P036') %check sides
-%}
-DiffusionSpec_Anatomic('P037')
+
+DiffusionSpec_Anatomic('P037') %check sides
+
 DiffusionSpec_Anatomic('P038')
 DiffusionSpec_Anatomic('P039')
 DiffusionSpec_Anatomic('P040')

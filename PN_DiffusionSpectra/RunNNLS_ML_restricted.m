@@ -13,7 +13,19 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     %% Generate NNLS space of values, not entirely sure about this part, check with TG?
     ADCBasisSteps = 300; %(??)
     ADCBasis = logspace( log10(5), log10(2200), ADCBasisSteps);
-    A = exp( -kron(b_values',1./ADCBasis));
+
+    %%% Diffusion Parameters (Baseline) from TG paper
+    diff_fast   = 0.180;
+    diff_med    = 0.0058; %[0.006 0.007 0.008 0.009 0.010];
+    diff_slow   = 0.0015;
+    frac_fast   = 0.10;
+    frac_med    = 0.30;
+    frac_slow   = 0.60;
+
+    ADCThresh=1./sqrt([diff_fast*diff_med diff_med*diff_slow]);
+    %ADCBasis_fix = [1/diff_fast logspace( log10(ADCThresh(1)), log10(ADCThresh(2)), ADCBasisSteps/3-2) 1/diff_slow];
+    ADCBasis_fix = [logspace( log10(5), log10(ADCThresh(2)), ADCBasisSteps/3-1) 1/diff_slow];
+    A_fix = exp( -kron(b_values',1./ADCBasis_fix));
 
     
     %% create empty arrays to fill
@@ -32,7 +44,8 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     SignalInput = SignalInput(:)/SignalInput(1);
 
     %% try to git them with NNLS
-    [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
+    %[TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
+    [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS_PartialRegularization(A_fix, SignalInput, [1 length(ADCBasis_fix)]);
     
     amplitudes(:) = TempAmplitudes';
     resnorm(:) = TempResnorm';

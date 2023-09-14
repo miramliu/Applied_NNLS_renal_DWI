@@ -54,11 +54,10 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     Chi = resnorm;
     Resid = resid;
 
-    %attempt with TG version? 
+    %attempt with TG version? prior to TG meeting Sept 14th. 
     % assumed ADC thresh from 2_Simulation...
     ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
     [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
-
 
     %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
