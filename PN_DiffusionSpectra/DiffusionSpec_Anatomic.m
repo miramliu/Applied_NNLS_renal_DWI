@@ -33,9 +33,14 @@ for i = 1:length(RoiTypes)
     %pause(1)
 
 
+    % for redo attempt
+    pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export';
+    ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra_TG.xlsx']; % All results will save in excel file
+
+    %
     % for baseline 
-    pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
-    ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
+    %pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
+    %ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     % for 3mo
     %pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export_3mo';

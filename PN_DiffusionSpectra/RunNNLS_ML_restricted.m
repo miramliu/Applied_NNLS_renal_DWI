@@ -1,6 +1,6 @@
 % Input: 
-
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
+%% after TG discussion on Sept 14th, trying to run it with restricted D_tissue via partial regularization
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_restricted(PatientNum,ROItype)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
