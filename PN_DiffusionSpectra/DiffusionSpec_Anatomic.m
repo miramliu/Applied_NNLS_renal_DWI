@@ -14,10 +14,16 @@ if nargin == 1
     PatientNum = varargin{1};
     %if both left and right
     RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
+    ab = 14; %assuming 4 slices (i.e. C1 - C4)
 elseif nargin == 2
     PatientNum = varargin{1};
+    RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
+
     if varargin{2} ==1
-        %RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
+        RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
+        ab = 14;
+    else
+        ab = varargin{2};
     end
 end
 
@@ -30,13 +36,13 @@ end
 % If only right
 %RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
 
-
+disp(PatientNum)
 for i = 1:length(RoiTypes)
     ROItype = RoiTypes{i}
 
-    ROItype = [PatientNum '_' ROItype];
+    ROItypename = [PatientNum '_' ROItype];
     %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-    SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+    SignalInput = ReadPatientDWIData_flexible(PatientNum, ROItypename,ab);
     %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
 
     %to match bi-exp, normalizing to b0
@@ -45,7 +51,8 @@ for i = 1:length(RoiTypes)
 
     %% change line 27 in runnnls_ml to ReadpatientDWIData_3mo for 3mo
     %this is restricted now
-    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);
+    %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);
+    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput);
 
     %plot(OutputDiffusionSpectrum);
     %pause(1)
@@ -65,7 +72,7 @@ for i = 1:length(RoiTypes)
     %ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra_3mo.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], ROItype};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','TG_DTissueDblood'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
@@ -73,7 +80,7 @@ for i = 1:length(RoiTypes)
         disp('saving data in excel')
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'Sheet','result_mod_ML','WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','TG_DTissueDblood','WriteMode','append')
     end
 
 end

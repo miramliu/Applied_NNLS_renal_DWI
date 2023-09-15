@@ -1,6 +1,6 @@
 % Input: 
-%% after TG discussion on Sept 14th, trying to run it with restricted D_tissue via partial regularization
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_restricted(SignalInput)
+%% after TG discussion on Sept 14th, trying to run it with restricted D_tissue AND D_blood via partial regularization
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
@@ -24,7 +24,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     ADCThresh=1./sqrt([diff_fast*diff_med diff_med*diff_slow]);
     %ADCBasis_fix = [1/diff_fast logspace( log10(ADCThresh(1)), log10(ADCThresh(2)), ADCBasisSteps/3-2) 1/diff_slow];
-    ADCBasis_fix = [logspace( log10(5), log10(ADCThresh(2)), 2*ADCBasisSteps/3-1) 1/diff_slow];
+    ADCBasis_fix = [1/diff_fast logspace( log10(ADCThresh(1)), log10(ADCThresh(2)), ADCBasisSteps/3-2) 1/diff_slow];
     A_fix = exp( -kron(b_values',1./ADCBasis_fix));
 
     
