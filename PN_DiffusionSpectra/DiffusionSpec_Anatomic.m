@@ -9,10 +9,18 @@
 
 %% also note: change read in runNNLS_ML to 3mo to have it read and save in correct folder. 
 
-function DiffusionSpec_Anatomic(PatientNum)
+function DiffusionSpec_Anatomic(varargin)
+if nargin == 1
+    PatientNum = varargin{1};
+    %if both left and right
+    RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
+elseif nargin == 2
+    PatientNum = varargin{1};
+    if varargin{2} ==1
+        %RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
+    end
+end
 
-%if both left and right
-RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
 %if only right or left
 %RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
 
@@ -26,8 +34,18 @@ RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M','RK_LP_C
 for i = 1:length(RoiTypes)
     ROItype = RoiTypes{i}
 
-    %% change line 27 in runnnls_ml to ReadpatientDWIData_3mo
-    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype);
+    ROItype = [PatientNum '_' ROItype];
+    %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+    SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+    %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
+
+    %to match bi-exp, normalizing to b0
+    SignalInput = SignalInput(:)/SignalInput(1);
+
+
+    %% change line 27 in runnnls_ml to ReadpatientDWIData_3mo for 3mo
+    %this is restricted now
+    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);
 
     %plot(OutputDiffusionSpectrum);
     %pause(1)
@@ -55,7 +73,7 @@ for i = 1:length(RoiTypes)
         disp('saving data in excel')
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'Sheet','Original','WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','result_mod_ML','WriteMode','append')
     end
 
 end

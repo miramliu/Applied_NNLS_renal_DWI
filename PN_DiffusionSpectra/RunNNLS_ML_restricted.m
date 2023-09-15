@@ -1,10 +1,10 @@
 % Input: 
 %% after TG discussion on Sept 14th, trying to run it with restricted D_tissue via partial regularization
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_restricted(PatientNum,ROItype)
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_restricted(SignalInput)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
-    disp(PatientNum)
+    %disp(PatientNum)
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
@@ -35,14 +35,6 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-    ROItype = [PatientNum '_' ROItype];
-    %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-    SignalInput = ReadPatientDWIData(PatientNum, ROItype);
-    %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
-
-    %to match bi-exp, normalizing to b0
-    SignalInput = SignalInput(:)/SignalInput(1);
-
     %% try to git them with NNLS
     %[TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
     [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS_PartialRegularization(A_fix, SignalInput, [1 length(ADCBasis_fix)]);
@@ -69,8 +61,8 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     %attempt with TG version? 
     % assumed ADC thresh from 2_Simulation...
-    ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
-    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
+    %ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
+    %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
 
 
     %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
@@ -85,7 +77,20 @@ end
 
 
 % to be able to get the data for the DWI analysis... hopefully.
-function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
+function SignalInput = ReadPatientDWIData(varargin)
+    if nargin == 2
+        PatientNum = varargin{1}; 
+        ROItype = varargin{2};
+        a = 1; b = 4; %if there are 1 - 4 ROI (so C1 - C4 for example)
+    elseif nargin ==3
+        if varargin{3} == 12
+            a = 1; b = 2; %if only 1-2 ROIs per type (so C1-C2 for example)
+        elseif varargin{3} == 34
+            a = 3; b = 4; %if only 3-4 ROIs per type (so C3 - C4)
+        elseif varargin{3} == 14
+            a = 1; b = 4;
+        end
+    end
 
     pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
@@ -95,7 +100,7 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
     ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);
     SignalInput = zeros(9,1);
     %average all four ROIs for analysis (CHECK IF I SHOULD DO THIS)
-    for k = 1:4 %for each of the 4 ROIs of every type (%%CHECK!!!!!!)
+    for k = a:b %for each of the 4 ROIs of every type (%%CHECK!!!!!!)
         ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype + string(k)),:); %so for example you want LK_LP_C, will check LK_LP_C1, LK_LP_C2 etc.
         
         % also make sure b-values are in order
