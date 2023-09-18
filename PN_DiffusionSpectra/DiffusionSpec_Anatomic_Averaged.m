@@ -86,11 +86,20 @@ function SignalInput = AverageOverROIs(PatientNum, ROItypenames, ab)
     end
 end
 
+
+
+%% saving and running on signal input
 function RunAndSave(PatientNum, ROItype,SignalInput)
     disp(PatientNum)
     disp(ROItype)
     %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);
-    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput);
+    %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput);
+    %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(SignalInput);
+
+    %% trying tri-exponential!
+    addpath '/Users/miraliu/Desktop/PostDocCode/Kidney_IVIM'
+    bvals = [10,30,50,80,120,200,400,800];
+    [resultsPeaks, rsq] = TriExpIVIMLeastSquaresEstimation(SignalInput,bvals);
 
     %plot(OutputDiffusionSpectrum);
     %pause(1)
@@ -101,7 +110,7 @@ function RunAndSave(PatientNum, ROItype,SignalInput)
 
    
     Identifying_Info = {['PN_' PatientNum], ROItype};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','TG_DTissueDblood_AV'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Rigid_Triexp'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
@@ -109,7 +118,7 @@ function RunAndSave(PatientNum, ROItype,SignalInput)
         disp('saving data in excel')
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'Sheet','TG_DTissueDblood_AV','WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','Rigid_Triexp','WriteMode','append')
     end
 
 end

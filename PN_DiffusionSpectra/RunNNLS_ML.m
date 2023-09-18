@@ -1,10 +1,12 @@
-% Input: 
+%give signal input, will fit and output the peaks
+% can also give pt number and ROI type
 
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML(PatientNum,ROItype)
+
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML(varargin)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
-    disp(PatientNum)
+%    disp(PatientNum)
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
@@ -23,13 +25,19 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-    ROItype = [PatientNum '_' ROItype];
-    %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-    SignalInput = ReadPatientDWIData(PatientNum, ROItype);
-    %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
-
-    %to match bi-exp, normalizing to b0
-    SignalInput = SignalInput(:)/SignalInput(1);
+    if nargin == 2
+        PatientNum = varargin{1};
+        ROItype = varargin{2};
+        ROItype = [PatientNum '_' ROItype];
+        %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+        SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+        %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
+    
+        %to match bi-exp, normalizing to b0
+        SignalInput = SignalInput(:)/SignalInput(1);
+    else
+        SignalInput = varargin{1};
+    end
 
     %% try to git them with NNLS
     [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
@@ -57,9 +65,9 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     %attempt with TG version? prior to TG meeting Sept 14th. 
     % assumed ADC thresh from 2_Simulation...
     ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
-    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
+    %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
 
-    %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
+    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
     resultsPeaks(2) = RegionFraction2; %(frac_med - RegionFraction2)./frac_med.*100;
     resultsPeaks(3) = RegionFraction3; %(frac_slow - )./frac_slow.*100;

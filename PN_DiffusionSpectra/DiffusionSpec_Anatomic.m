@@ -52,7 +52,12 @@ for i = 1:length(RoiTypes)
     %% change line 27 in runnnls_ml to ReadpatientDWIData_3mo for 3mo
     %this is restricted now
     %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);
-    [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput);
+    %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(SignalInput);
+
+    %% trying tri-exponential!
+    addpath '/Users/miraliu/Desktop/PostDocCode/Kidney_IVIM'
+    bvals = [0,10,30,50,80,120,200,400,800];
+    [resultsPeaks, rsq] = TriExpIVIMLeastSquaresEstimation_restricted(SignalInput,bvals);
 
     %plot(OutputDiffusionSpectrum);
     %pause(1)
@@ -72,7 +77,7 @@ for i = 1:length(RoiTypes)
     %ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra_3mo.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], ROItype};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','TG_DTissueDblood'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Rigid_Triexp_Dtissue'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
@@ -80,7 +85,7 @@ for i = 1:length(RoiTypes)
         disp('saving data in excel')
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
-        writecell(Export_Cell,ExcelFileName,'Sheet','TG_DTissueDblood','WriteMode','append')
+        writecell(Export_Cell,ExcelFileName,'Sheet','Rigid_Triexp_Dtissue','WriteMode','append')
     end
 
 end
