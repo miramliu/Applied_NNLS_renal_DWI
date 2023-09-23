@@ -27,7 +27,7 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-    ROItype = [PatientNum '_' ROItype];
+    %ROItype = [PatientNum '_' ROItype];
     SignalInput = ReadPatientDWIData(PatientNum, ROItype);
 
     %% try to git them with NNLS
@@ -65,8 +65,13 @@ function [OutputDiffusionSpectrum, Chi, Resid, y_recon, resultsPeaks] = RunNNLS_
     end
     
 
-    pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
-    ExcelFileName=[pathtodata, '/','PN_IVIM_Lesion_DiffusionSpectra.xlsx']; % All results will save in excel file
+    %pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
+    %ExcelFileName=[pathtodata, '/','PN_IVIM_Lesion_DiffusionSpectra.xlsx']; % All results will save in excel file
+
+     % for interobserver attempt
+    pathtodata = '/Users/miraliu/Desktop/Data/Arthi test ROIs';
+    ExcelFileName=[pathtodata, '/','PN_Arthi_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
+
 
     Identifying_Info = {['PN_' PatientNum], ROItype};
     Existing_Data = readcell(ExcelFileName,'Range','A:B'); %read only identifying info that already exists
@@ -85,24 +90,35 @@ end
 % to be able to get the data for the DWI analysis... hopefully.
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
-    pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
-    pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
+    %pathtodata = '/Users/neuroimaging/Desktop/ML_PartialNephrectomy_Export';
+    %pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     
+    %interobserver arthi
+    pathtodata = '/Users/miraliu/Desktop/Data/Arthi Test ROIs/';
+    pathtoCSV = [pathtodata '/' PatientNum  '_Arthi_IVIM.csv'];
+
     %read data
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');
-    ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);
+    %ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);
+    ROITypeTable = DataFrame(contains(DataFrame.RoiName, ROItype),:);
    
 
     SignalInput = zeros(9,1);
     %average all four ROIs for analysis (CHECK IF I SHOULD DO THIS)=
-    ROITypeTablesub = ROITypeTable(strcmp(ROITypeTable.RoiName, ROItype ),:); %so should just be lesion
+    ROITypeTablesub = ROITypeTable(contains(ROITypeTable.RoiName, ROItype ),:); %so should just be lesion
     % also make sure b-values are in order
-    totalslices = nnz(~ROITypeTablesub.Dynamic); %the number of zeros (i.e. slices)
-    %ROITypeTablesub.Dynamic(1:7:end)
+    totalslices = nnz(~ROITypeTable.Dynamic); %the number of zeros (i.e. slices)
+    slices = unique(ROITypeTable.ImageNo);
     
     if ROITypeTablesub.Dynamic(1:totalslices:end) == [0;1;2;3;4;5;6;7;8]
-        for slice = 1:totalslices
-            SignalInput =  SignalInput + ROITypeTablesub.RoiMean(slice:totalslices:end); %avearge over all slices
+        for slice = 1:length(slices)
+            ROITypeTablesub = ROITypeTable(ismember(ROITypeTable.ImageNo, slices(slice)),:); %this will get all lesion on slice, 
+            ROITypeTablesub = sortrows(ROITypeTablesub,'Dynamic'); %order them according to dynamic, and get the mean from that
+
+
+            SignalInput =  SignalInput + ROITypeTablesub.RoiMean(1:end); %avearge over all slices
+            %length(ROITypeTablesub.RoiMean(slice:totalslices:end))
+            %SignalInput =  SignalInput + ROITypeTablesub.RoiMean(slice:totalslices:end); %avearge over all slices
             %size(SignalInput)
         end
         SignalInput = SignalInput./SignalInput(1); %normalize to b0

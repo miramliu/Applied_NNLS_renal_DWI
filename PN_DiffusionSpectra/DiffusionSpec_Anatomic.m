@@ -71,7 +71,7 @@ for i = 1:length(RoiTypes)
     %pause(1)
 
 
-    % for redo attempt
+    % for interobserver attempt
     pathtodata = '/Users/miraliu/Desktop/Data/Arthi test ROIs';
     ExcelFileName=[pathtodata, '/','PN_Arthi_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
