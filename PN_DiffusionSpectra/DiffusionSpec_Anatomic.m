@@ -47,12 +47,19 @@ for i = 1:length(RoiTypes)
     ROItype = RoiTypes{i}
 
     ROItypename = [PatientNum '_' ROItype];
-    %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+
+%% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
     %SignalInput = ReadPatientDWIData_flexible(PatientNum, ROItypename,ab);
     %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
 
-    SignalInput = ReadPatientDWIData_flexible_Arthi(PatientNum, ROItypename,ab); %arthi to compare against... 
+    %SignalInput = ReadPatientDWIData_flexible_Arthi(PatientNum, ROItypename,ab); %arthi to compare against... 
     %to match bi-exp, normalizing to b0
+%% for test-retest
+
+    % edit the path in the function below
+    SignalInput = ReadPatientDWIData_flexible(PatientNum, ROItypename,ab);
+
+
     SignalInput = SignalInput(:)/SignalInput(1);
 
 
@@ -70,6 +77,7 @@ for i = 1:length(RoiTypes)
     %plot(OutputDiffusionSpectrum);
     %pause(1)
 
+    %{
 
     % for interobserver attempt
     pathtodata = '/Users/miraliu/Desktop/Data/Arthi test ROIs';
@@ -94,6 +102,30 @@ for i = 1:length(RoiTypes)
         dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
         Export_Cell = [Identifying_Info,dataarray];
         writecell(Export_Cell,ExcelFileName,'Sheet','Sheet1','WriteMode','append')
+    end
+
+    %}
+
+%% test- retest 
+        % for test-retest
+    disp('saving test-retest')
+    pathtodata = '/Users/miraliu/Desktop/Data/PartialNephrectomy_TestRetest/';
+    ExcelFileName=[pathtodata, '/','PN_TestRetesting.xlsx']; % All results will save in excel file
+
+    dataarray= {resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq};
+
+
+    %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
+
+    Identifying_Info = {['PN_' PatientNum], 'IVIM_retest', [PatientNum '_' ROItype]}
+    Existing_Data = readcell(ExcelFileName,'Range','A:C','Sheet','Voxelwise tri-IVIM'); %read only identifying info that already exists
+    MatchFunc = @(A,B)cellfun(@isequal,A,B);
+    idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
+
+    if sum(idx)==0
+        disp('saving data in excel')
+        Export_Cell = [Identifying_Info,dataarray];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise tri-IVIM')
     end
 
 end
