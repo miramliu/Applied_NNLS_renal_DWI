@@ -167,7 +167,7 @@ function RunAndSave(PatientNum, ROItype,SignalInput)
 
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
-    Identifying_Info = {['PN_' PatientNum], 'IVIM_retest', [PatientNum '_' ROItype]}
+    Identifying_Info = {['PN_' PatientNum], 'IVIM_test', [PatientNum '_' ROItype]}
     Existing_Data = readcell(ExcelFileName,'Range','A:C','Sheet','Voxelwise tri-IVIM'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));

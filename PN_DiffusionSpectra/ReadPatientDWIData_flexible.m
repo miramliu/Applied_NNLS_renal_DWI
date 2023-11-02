@@ -26,7 +26,7 @@ function SignalInput = ReadPatientDWIData_flexible(varargin)
     disp('for test-retest')
     %for test-retest
     pathtodata = '/Users/miraliu/Desktop/Data/PartialNephrectomy_TestRetest/';
-    pathtoCSV = [pathtodata '/P004_IVIM_Scan1_retest.csv']
+    pathtoCSV = [pathtodata '/P011_IVIM_Scan1_test.csv']
 
 
     %read data
