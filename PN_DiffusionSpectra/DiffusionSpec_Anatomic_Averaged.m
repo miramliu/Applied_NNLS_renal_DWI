@@ -34,21 +34,21 @@ function DiffusionSpec_Anatomic_Averaged(varargin)
         % get average medullar ROI
         SignalInput = AverageOverROIs(PatientNum, medulregL, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'LK_M',SignalInput)
+        RunAndSave_averaged(PatientNum,'LK_M',SignalInput)
         % get average cortical ROI
         SignalInput = AverageOverROIs(PatientNum, cortregL, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'LK_C',SignalInput)
+        RunAndSave_averaged(PatientNum,'LK_C',SignalInput)
     
         %% right kidney
         % get average medullar ROI
         SignalInput = AverageOverROIs(PatientNum, medulregR, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'RK_M',SignalInput)
+        RunAndSave_averaged(PatientNum,'RK_M',SignalInput)
         % get average cortical ROI
         SignalInput = AverageOverROIs(PatientNum, cortregR, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'RK_C',SignalInput)
+        RunAndSave_averaged(PatientNum,'RK_C',SignalInput)
     elseif nargin == 2 && varargin{2} ==1
         RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
         medulreg = regexp(RoiTypes, '^.*.M$','match'); medulreg = medulreg(~cellfun('isempty',medulreg)); medulreg = medulreg{:};
@@ -59,11 +59,11 @@ function DiffusionSpec_Anatomic_Averaged(varargin)
         % get average medullar ROI
         SignalInput = AverageOverROIs(PatientNum, medulreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'_M',SignalInput)
+        RunAndSave_averaged(PatientNum,'_M',SignalInput)
         % get average cortical ROI
         SignalInput = AverageOverROIs(PatientNum, cortreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'_C',SignalInput)
+        RunAndSave_averaged(PatientNum,'_C',SignalInput)
 %% only L kidney
     elseif nargin == 2 && varargin{2} ==2
         RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
@@ -75,11 +75,11 @@ function DiffusionSpec_Anatomic_Averaged(varargin)
         % get average medullar ROI
         SignalInput = AverageOverROIs(PatientNum, medulreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'LK_M',SignalInput)
+        RunAndSave_averaged(PatientNum,'LK_M',SignalInput)
         % get average cortical ROI
         SignalInput = AverageOverROIs(PatientNum, cortreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'LK_C',SignalInput)
+        RunAndSave_averaged(PatientNum,'LK_C',SignalInput)
 %% only R kidney
     elseif nargin == 2 && varargin{2} ==3
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
@@ -91,11 +91,11 @@ function DiffusionSpec_Anatomic_Averaged(varargin)
         % get average medullar ROI
         SignalInput = AverageOverROIs(PatientNum, medulreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'RK_M',SignalInput)
+        RunAndSave_averaged(PatientNum,'RK_M',SignalInput)
         % get average cortical ROI
         SignalInput = AverageOverROIs(PatientNum, cortreg, ab); 
         %fit that and save it
-        RunAndSave(PatientNum,'RK_C',SignalInput)
+        RunAndSave_averaged(PatientNum,'RK_C',SignalInput)
     else
         error('incorrect input')
     end
@@ -123,7 +123,7 @@ end
 
 
 %% saving and running on signal input
-function RunAndSave(PatientNum, ROItype,SignalInput)
+function RunAndSave_averaged(PatientNum, ROItype,SignalInput)
     disp(PatientNum)
     disp(ROItype)
     %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(SignalInput);

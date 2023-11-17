@@ -74,7 +74,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
         
         GeoMeanRegionADC_2 = (1./exp( dot( ADCampsRange2, log( ADCBasisRange2 ) ) ./ ( RegionFraction2*TotalArea ) )).*1000;
     else
-        disp('no 2nd peak')
+        %disp('no 2nd peak')
         %set to zero
         GeoMeanRegionADC_2 = 0;
         RegionFraction2 = 0;
@@ -91,7 +91,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
             
             GeoMeanRegionADC_3 = (1./exp( dot( ADCampsRange3, log( ADCBasisRange3 ) ) ./ ( RegionFraction3*TotalArea ) )).*1000;
      else
-         disp('no 3rd peak')
+         %disp('no 3rd peak')
         %set to zero
         GeoMeanRegionADC_3 = 0;
         RegionFraction3 = 0;
