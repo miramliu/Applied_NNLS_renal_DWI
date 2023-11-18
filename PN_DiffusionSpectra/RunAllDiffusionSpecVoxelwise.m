@@ -1,4 +1,4 @@
-
+%{
 DiffusionSpec_Voxelwise('P001')
 DiffusionSpec_Voxelwise('P002',1) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P003',1) %must change ROI see line 17 in DiffusionSpect_Voxelwise
@@ -52,6 +52,7 @@ DiffusionSpec_Voxelwise('P044')
 %% lesion
 
 DiffusionSpec_Voxelwise('P001',4)
+%}
 DiffusionSpec_Voxelwise('P002',4) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P003',4) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P004',4)
