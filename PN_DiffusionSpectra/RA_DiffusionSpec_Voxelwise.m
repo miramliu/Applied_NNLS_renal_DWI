@@ -138,14 +138,16 @@ function RunAndSave_voxelwise(PatientNum, ROItype,SignalInput)
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
         [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(currcurve); %best results so far regarding Mann-Whitney U & AUC
-    
-        if rsq>0.7
-            ffastvalues(voxelj,1) = resultsPeaks(1);
-            fmedvalues(voxelj,1) = resultsPeaks(2);
-            fslowvalues(voxelj,1) = resultsPeaks(3);
-            Dfastvalues(voxelj,1) = resultsPeaks(4);
-            Dmedvalues(voxelj,1) = resultsPeaks(5);
-            Dslowvalues(voxelj,1) = resultsPeaks(6);
+        
+        if rsq>0.7 
+            if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
+                ffastvalues(voxelj,1) = resultsPeaks(1);
+                fmedvalues(voxelj,1) = resultsPeaks(2);
+                fslowvalues(voxelj,1) = resultsPeaks(3);
+                Dfastvalues(voxelj,1) = resultsPeaks(4);
+                Dmedvalues(voxelj,1) = resultsPeaks(5);
+                Dslowvalues(voxelj,1) = resultsPeaks(6);
+            end
         else
             ffastvalues(voxelj,1) = NaN;
             fmedvalues(voxelj,1) = NaN;
