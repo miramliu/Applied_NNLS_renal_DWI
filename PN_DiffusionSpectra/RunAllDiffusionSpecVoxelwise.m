@@ -12,7 +12,8 @@ DiffusionSpec_Voxelwise('P010')
 DiffusionSpec_Voxelwise('P011')
 DiffusionSpec_Voxelwise('P012')
 DiffusionSpec_Voxelwise('P013') %13 being funky index error at peak 2
-DiffusionSpec_Voxelwise('P014')
+%DiffusionSpec_Voxelwise('P014') % being funky... 
+%}
 DiffusionSpec_Voxelwise('P015')
 DiffusionSpec_Voxelwise('P016')
 DiffusionSpec_Voxelwise('P017') %17 being funky index error at peak 2

@@ -26,6 +26,15 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
 	    pksMax=pksMax(setdiff(1:end,neglPeak));
     end
     
+    % check for peaks
+    if length(peaksMax)<1
+        GeoMeanRegionADC_1 = 0;
+        RegionFraction1 = 10000; %just to catch it.
+        GeoMeanRegionADC_2 = 0;
+        RegionFraction2 = 0;
+        GeoMeanRegionADC_3 = 0;
+        RegionFraction3 = 0;
+    end
     %Peak1
     
     Peak1End = locsMin(locsMin > peaksMax(1));

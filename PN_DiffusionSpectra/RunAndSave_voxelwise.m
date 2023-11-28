@@ -5,12 +5,12 @@ function RunAndSave_voxelwise(PatientNum, ROItype,SignalInput)
     disp([PatientNum '_' ROItype])
     %% trying tri-exponential!
     
-    fslowvalues = zeros(size(SignalInput,2),1);
-    fmedvalues = zeros(size(SignalInput,2),1);
     ffastvalues = zeros(size(SignalInput,2),1);
-    Dslowvalues = zeros(size(SignalInput,2),1);
-    Dmedvalues = zeros(size(SignalInput,2),1);
+    fmedvalues = zeros(size(SignalInput,2),1);
+    fslowvalues = zeros(size(SignalInput,2),1);
     Dfastvalues = zeros(size(SignalInput,2),1);
+    Dmedvalues = zeros(size(SignalInput,2),1);
+    Dslowvalues = zeros(size(SignalInput,2),1);
     %bvalues = [0,10,30,50,80,120,200,400,800];
     for voxelj = 1:size(SignalInput,2)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
@@ -20,37 +20,37 @@ function RunAndSave_voxelwise(PatientNum, ROItype,SignalInput)
         [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(currcurve); %best results so far regarding Mann-Whitney U & AUC
     
         if rsq>0.7
-            fslowvalues(voxelj,1) = resultsPeaks(1);
+            ffastvalues(voxelj,1) = resultsPeaks(1);
             fmedvalues(voxelj,1) = resultsPeaks(2);
-            ffastvalues(voxelj,1) = resultsPeaks(3);
-            Dslowvalues(voxelj,1) = resultsPeaks(4);
+            fslowvalues(voxelj,1) = resultsPeaks(3);
+            Dfastvalues(voxelj,1) = resultsPeaks(4);
             Dmedvalues(voxelj,1) = resultsPeaks(5);
-            Dfastvalues(voxelj,1) = resultsPeaks(6);
+            Dslowvalues(voxelj,1) = resultsPeaks(6);
         else
-            fslowvalues(voxelj,1) = NaN;
-            fmedvalues(voxelj,1) = NaN;
             ffastvalues(voxelj,1) = NaN;
-            Dslowvalues(voxelj,1) = NaN;
-            Dmedvalues(voxelj,1) = NaN;
+            fmedvalues(voxelj,1) = NaN;
+            fslowvalues(voxelj,1) = NaN;
             Dfastvalues(voxelj,1) = NaN;
+            Dmedvalues(voxelj,1) = NaN;
+            Dslowvalues(voxelj,1) = NaN;
         end
     end
 
     %remove NaN before doing stats
-    fslowvalues=fslowvalues(~isnan(fslowvalues));
-    fmedvalues=fmedvalues(~isnan(fmedvalues));
     ffastvalues=ffastvalues(~isnan(ffastvalues));
-    Dslowvalues=Dslowvalues(~isnan(Dslowvalues));
-    Dmedvalues=Dmedvalues(~isnan(Dmedvalues));
+    fmedvalues=fmedvalues(~isnan(fmedvalues));
+    fslowvalues=fslowvalues(~isnan(fslowvalues));
     Dfastvalues=Dfastvalues(~isnan(Dfastvalues));
+    Dmedvalues=Dmedvalues(~isnan(Dmedvalues));
+    Dslowvalues=Dslowvalues(~isnan(Dslowvalues));
 
-    dataarray={mean(fslowvalues), median(fslowvalues), std(fslowvalues), kurtosis(fslowvalues), skewness(fslowvalues),...
+    dataarray={mean(ffastvalues), median(ffastvalues), std(ffastvalues), kurtosis(ffastvalues), skewness(ffastvalues),...
                         mean(fmedvalues), median(fmedvalues), std(fmedvalues), kurtosis(fmedvalues), skewness(fmedvalues),...
-                        mean(ffastvalues), median(ffastvalues), std(ffastvalues), kurtosis(ffastvalues), skewness(ffastvalues),...
-                        mean(Dslowvalues), median(Dslowvalues), std(Dslowvalues), kurtosis(Dslowvalues), skewness(Dslowvalues),...
-                        mean(Dmedvalues), median(Dmedvalues), std(Dmedvalues), kurtosis(Dmedvalues), skewness(Dmedvalues),...
+                        mean(fslowvalues), median(fslowvalues), std(fslowvalues), kurtosis(fslowvalues), skewness(fslowvalues),...
                         mean(Dfastvalues), median(Dfastvalues), std(Dfastvalues), kurtosis(Dfastvalues), skewness(Dfastvalues),...
-                        size(fslowvalues,1),size(SignalInput,2)};
+                        mean(Dmedvalues), median(Dmedvalues), std(Dmedvalues), kurtosis(Dmedvalues), skewness(Dmedvalues),...
+                        mean(Dslowvalues), median(Dslowvalues), std(Dslowvalues), kurtosis(Dslowvalues), skewness(Dslowvalues),...
+                        size(ffastvalues,1),size(SignalInput,2)};
                 
 
             %% trying tri-exponential!

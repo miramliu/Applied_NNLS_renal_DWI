@@ -25,11 +25,11 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     end
 
 
-    
+    %{
     % for original baseline
     pathtodata = '/Users/miraliu/Desktop/Data/PN/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
-
+    %}
     %{
     % for interobserver
     pathtodata = '/Users/miraliu/Desktop/Data/Arthi Test ROIs/';
@@ -43,6 +43,11 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     pathtodata = '/Users/miraliu/Desktop/Data/PartialNephrectomy_TestRetest/';
     pathtoCSV = [pathtodata '/P011_IVIM_Scan1_retest.csv']
     %}
+
+
+    %% for RENAL ALLOGRAFT
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
+    pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
 
     
         %% for each type, this is Poles
