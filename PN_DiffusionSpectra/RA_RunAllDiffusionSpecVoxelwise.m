@@ -52,7 +52,7 @@ RA_DiffusionSpec_Voxelwise('P045')
 
 
 RA_DiffusionSpec_Voxelwise('P049') % no peak error
-%}
+
 RA_DiffusionSpec_Voxelwise('P050')
 RA_DiffusionSpec_Voxelwise('P051')
 RA_DiffusionSpec_Voxelwise('P052')
@@ -64,6 +64,25 @@ RA_DiffusionSpec_Voxelwise('P057')
 RA_DiffusionSpec_Voxelwise('P058')
 RA_DiffusionSpec_Voxelwise('P059')
 RA_DiffusionSpec_Voxelwise('P060')
+
+%}
+
+%% site 2 (cornell)
+%for center 2, change PatientNumb to RA_02 rather than RA_01 in
+%RA_DiffusionSpec_Voxelwise
+RA_DiffusionSpec_Voxelwise('P006')
+RA_DiffusionSpec_Voxelwise('P007')
+RA_DiffusionSpec_Voxelwise('P009')
+RA_DiffusionSpec_Voxelwise('P010')
+RA_DiffusionSpec_Voxelwise('P011')
+RA_DiffusionSpec_Voxelwise('P012')
+RA_DiffusionSpec_Voxelwise('P014')
+RA_DiffusionSpec_Voxelwise('P015')
+RA_DiffusionSpec_Voxelwise('P018')
+RA_DiffusionSpec_Voxelwise('P019')
+RA_DiffusionSpec_Voxelwise('P020')
+RA_DiffusionSpec_Voxelwise('P021')
+
 
 
 

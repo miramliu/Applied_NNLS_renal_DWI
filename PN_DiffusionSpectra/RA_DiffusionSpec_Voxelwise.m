@@ -14,7 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if nargin == 1 || nargin == 2 && varargin{2} > 10
        
         RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
