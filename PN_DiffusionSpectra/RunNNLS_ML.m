@@ -8,9 +8,40 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     addpath ../../Applied_NNLS_renal_DWI/rNNLS
 %    disp(PatientNum)
 
+    b_values = [0,10,30,50,80,120,200,400,800]; %if original 9 
+
+    if nargin == 2
+        if ischar(varargin{2})
+            PatientNum = varargin{1};
+            ROItype = varargin{2};
+            ROItype = [PatientNum '_' ROItype];
+            %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+            SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+            %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
+        
+            %to match bi-exp, normalizing to b0
+            SignalInput = varargin{1};
+            SignalInput = SignalInput(:)/SignalInput(1);
+        else
+            SignalInput = varargin{1};
+            b_values = varargin{2};
+            SignalInput = SignalInput(:)/SignalInput(1);
+        end
+    elseif nargin == 3 %have ROI type and new b-values 
+        PatientNum = varargin{1};
+        ROItype = varargin{2};
+        ROItype = [PatientNum '_' ROItype];
+        %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+        SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+        SignalInput = SignalInput(:)/SignalInput(1);
+        b_values = varargin{3}; 
+    else
+
+        SignalInput = varargin{1};
+    end
+
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
     %list_of_b_values(h,1:length(b_values)) = b_values; %make matrix of b-values
-    b_values = [0,10,30,50,80,120,200,400,800];
 
     %% Generate NNLS space of values, not entirely sure about this part, check with TG?
     ADCBasisSteps = 300; %(??)
@@ -25,20 +56,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     y_recon = zeros(max(b_values),1);
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
-    if nargin == 2
-        PatientNum = varargin{1};
-        ROItype = varargin{2};
-        ROItype = [PatientNum '_' ROItype];
-        %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-        SignalInput = ReadPatientDWIData(PatientNum, ROItype);
-        %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
     
-        %to match bi-exp, normalizing to b0
-        SignalInput = SignalInput(:)/SignalInput(1);
-    else
-        SignalInput = varargin{1};
-    end
-
     %% try to git them with NNLS
     [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
     
