@@ -125,7 +125,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
          %Peak4
                 range4 = (Peak3End(1)+1):length(ADCBasis); %ADCBasis >= ADCBasis(Peak2End(1)+1)  &  ADCBasis < ADCBasis(end);
                 
-                ADCBasisRange4 = ADCBasis(range);
+                ADCBasisRange4 = ADCBasis(range4);
                 ADCampsRange4 = TempAmplitudes(range4);
                 RegionFraction4 = sum( ADCampsRange4 ) / TotalArea;
                 

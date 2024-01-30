@@ -1,90 +1,90 @@
 
 
 %% Run all renal allograft IVIM cases
-%{
-RA_DiffusionSpec_Voxelwise_spectrumexport('P001')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P002')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P003')
+
+%RA_DiffusionSpec_Voxelwise_fourpeaks('P001')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P002')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
 
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P006')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P007')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P008') %no peak error
-RA_DiffusionSpec_Voxelwise_spectrumexport('P009')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P010')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P011')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P008') %no peak error
+%RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
 
-%RA_DiffusionSpec_Voxelwise_spectrumexport('P012')
+%RA_DiffusionSpec_Voxelwise_fourpeaks('P012')
 %}
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P014')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
 
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P017')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P018')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P019')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P017')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P018')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P019')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P021')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P021')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P023')
-
-
-RA_DiffusionSpec_Voxelwise_spectrumexport('P026')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P027')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P028')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P029')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P030')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P031')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P032')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P033')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P034')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P035')
-
-RA_DiffusionSpec_Voxelwise_spectrumexport('P037')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P038')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P039')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P040')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P041')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P042')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P043')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P044')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P045')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P023')
 
 
+RA_DiffusionSpec_Voxelwise_fourpeaks('P026')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P027')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P028')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P029')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P030')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P031')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P032')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P033')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P034')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P035')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P049') % no peak error
+RA_DiffusionSpec_Voxelwise_fourpeaks('P037')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P038')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P039')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P040')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P041')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P042')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P043')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P044')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P045')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P050')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P051')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P052')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P054')
+
+RA_DiffusionSpec_Voxelwise_fourpeaks('P049') % no peak error
+
+RA_DiffusionSpec_Voxelwise_fourpeaks('P050')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P051')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P052')
+
+RA_DiffusionSpec_Voxelwise_fourpeaks('P054')
 %}
-RA_DiffusionSpec_Voxelwise_spectrumexport('P055')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P056')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P057')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P058')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P059')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P060')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P055')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P056')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P057')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P058')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P059')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P060')
 
 %}
 
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
-%RA_DiffusionSpec_Voxelwise_spectrumexport
+%RA_DiffusionSpec_Voxelwise_fourpeaks
 %{
-RA_DiffusionSpec_Voxelwise_spectrumexport('P006')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P007')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P009')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P010')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P011')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P012')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P014')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P015')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P018')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P019')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P020')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P021')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P012')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P015')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P018')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P019')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P020')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P021')
 %}
 
 
