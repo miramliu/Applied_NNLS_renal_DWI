@@ -3,7 +3,7 @@ function RunAndSave_AnisotropySimulation(ImportSheetName)
 
 %% read in data
     pathtodata = '/Users/miraliu/Desktop/PostDocCode/Multiexp_Simulations_python/';
-    pathtoCSV=[pathtodata, '/','Test.xlsx']; % All results will save in excel file
+    pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves.xlsx']; % All results will save in excel file
 
 
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:M','Sheet', ImportSheetName);    
