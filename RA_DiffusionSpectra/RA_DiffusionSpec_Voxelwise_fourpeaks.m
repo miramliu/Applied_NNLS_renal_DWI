@@ -14,8 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
-    %PatientNum = ['RA_02_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if nargin == 1 || nargin == 2 && varargin{2} > 10
        
         RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
@@ -146,6 +146,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     Dmedvalues_sort = zeros(size(SignalInput,2),1);
     Dslowvalues_sort = zeros(size(SignalInput,2),1);
     Dfibrovalues_sort = zeros(size(SignalInput,2),1);
+    rsqvalues = zeros(size(SignalInput,2),1);
+
     for voxelj = 1:size(SignalInput,2)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
         currcurve = currcurve(:)/currcurve(1);
@@ -163,7 +165,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dmedvalues(voxelj,1) = resultsPeaks(6);
                 Dslowvalues(voxelj,1) = resultsPeaks(7);
                 Dfibrovalues(voxelj,1) = resultsPeaks(8);
-
+                rsqvalues(voxelj,1) = rsq;
 
                 % now also try to sort them... 
                 SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks);
@@ -175,6 +177,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
+                
             end
         else
             ffastvalues(voxelj,1) = NaN;
@@ -194,6 +197,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
             Dmedvalues_sort(voxelj,1) = NaN;
             Dslowvalues_sort(voxelj,1) = NaN;
             Dfibrovalues_sort(voxelj,1) = NaN;
+            rsqvalues(voxelj,1) = NaN;
         end
     end
 
@@ -206,6 +210,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     Dmedvalues=Dmedvalues(~isnan(Dmedvalues));
     Dslowvalues=Dslowvalues(~isnan(Dslowvalues));
     Dfibrovalues=Dfibrovalues(~isnan(Dfibrovalues));
+    rsqvalues=rsqvalues(~isnan(rsqvalues));
 
     dataarray={mean(ffastvalues), median(ffastvalues), std(ffastvalues), kurtosis(ffastvalues), skewness(ffastvalues),...
                         mean(fmedvalues), median(fmedvalues), std(fmedvalues), kurtosis(fmedvalues), skewness(fmedvalues),...
@@ -215,8 +220,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                         mean(Dmedvalues), median(Dmedvalues), std(Dmedvalues), kurtosis(Dmedvalues), skewness(Dmedvalues),...
                         mean(Dslowvalues), median(Dslowvalues), std(Dslowvalues), kurtosis(Dslowvalues), skewness(Dslowvalues),...
                         mean(Dfibrovalues), median(Dfibrovalues), std(Dfibrovalues), kurtosis(Dfibrovalues), skewness(Dfibrovalues),...
-                        size(ffastvalues,1),size(SignalInput,2)};
-   
+                        size(ffastvalues,1),size(SignalInput,2),...
+                        mean(rsqvalues), std(rsqvalues)};
     
     
     %remove NaN before doing stats
@@ -237,17 +242,10 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                         mean(Dmedvalues_sort), median(Dmedvalues_sort), std(Dmedvalues_sort), kurtosis(Dmedvalues_sort), skewness(Dmedvalues_sort),...
                         mean(Dslowvalues_sort), median(Dslowvalues_sort), std(Dslowvalues_sort), kurtosis(Dslowvalues_sort), skewness(Dslowvalues_sort),...
                         mean(Dfibrovalues_sort), median(Dfibrovalues_sort), std(Dfibrovalues_sort), kurtosis(Dfibrovalues_sort), skewness(Dfibrovalues_sort),...
-                        size(ffastvalues_sort,1),size(SignalInput,2)};
+                        size(ffastvalues_sort,1),size(SignalInput,2),...
+                        mean(rsqvalues), std(rsqvalues)};
 
-            %% trying tri-exponential!
-        %addpath '/Users/miraliu/Desktop/PostDocCode/Kidney_IVIM'
-        %bvals = [10,30,50,80,120,200,400,800];
-        %[resultsPeaks, rsq] = TriExpIVIMLeastSquaresEstimation(SignalInput,bvals);
-    
-        %plot(OutputDiffusionSpectrum);
-        %pause(1)
 
-    
 
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file

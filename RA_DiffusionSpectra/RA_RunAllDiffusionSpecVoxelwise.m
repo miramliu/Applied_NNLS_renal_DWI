@@ -1,8 +1,8 @@
 
 
 %% Run all renal allograft IVIM cases
-
-%RA_DiffusionSpec_Voxelwise_fourpeaks('P001')
+%{
+RA_DiffusionSpec_Voxelwise_fourpeaks('P001')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P002')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
 
@@ -10,12 +10,12 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P008') %no peak error
-%RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
 
-%RA_DiffusionSpec_Voxelwise_fourpeaks('P012')
-%}
+%RA_DiffusionSpec_Voxelwise_fourpeaks('P012') %error
+
 
 RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
 
@@ -59,7 +59,7 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P051')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P052')
 
 RA_DiffusionSpec_Voxelwise_fourpeaks('P054')
-%}
+
 RA_DiffusionSpec_Voxelwise_fourpeaks('P055')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P056')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P057')
@@ -71,11 +71,12 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P060')
 
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
-%RA_DiffusionSpec_Voxelwise_fourpeaks
-%{
+%RA_DiffusionSpec_Voxelwise_fourpeaks, line 17 or 18
+%
 RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
+
 RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P012')
