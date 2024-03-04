@@ -79,12 +79,12 @@ for i = 1:length(RoiTypes)
 
     %{
 
-    % for interobserver attempt
+%% for interobserver attempt
     pathtodata = '/Users/miraliu/Desktop/Data/Arthi test ROIs';
     ExcelFileName=[pathtodata, '/','PN_Arthi_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     %
-    % for baseline 
+%% for baseline 
     %pathtodata = '/Users/miraliu/Desktop/ML_PartialNephrectomy_Export';
     %ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 

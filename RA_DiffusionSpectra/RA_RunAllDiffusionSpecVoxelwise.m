@@ -8,6 +8,7 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
 
 
 RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
+%}
 RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P008') %no peak error
 RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
@@ -72,7 +73,7 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P060')
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
 %RA_DiffusionSpec_Voxelwise_fourpeaks, line 17 or 18
-%
+%{
 RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P009')

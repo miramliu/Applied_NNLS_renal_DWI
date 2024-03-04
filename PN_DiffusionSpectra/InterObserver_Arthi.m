@@ -5,38 +5,40 @@
 % kidney ROIs
 % done with RunNNLS_ML and CVNNLS and NNLS_result_mod_ML
 %{
-DiffusionSpec_Anatomic('P001')
-DiffusionSpec_Anatomic('P002',3)
-DiffusionSpec_Anatomic('P003',3)
-DiffusionSpec_Anatomic('P006')
-DiffusionSpec_Anatomic('P007')
-DiffusionSpec_Anatomic('P008')
-DiffusionSpec_Anatomic('P009')
-DiffusionSpec_Anatomic('P010')
-DiffusionSpec_Anatomic('P012')
-DiffusionSpec_Anatomic('P013')
-DiffusionSpec_Anatomic('P014')
-DiffusionSpec_Anatomic('P015')
-DiffusionSpec_Anatomic('P017')
-DiffusionSpec_Anatomic('P018')
-DiffusionSpec_Anatomic('P019')
-DiffusionSpec_Anatomic('P020')
-DiffusionSpec_Anatomic('P021')
-DiffusionSpec_Anatomic('P022')
-DiffusionSpec_Anatomic('P024')
-DiffusionSpec_Anatomic('P025')
-DiffusionSpec_Anatomic('P026')
-DiffusionSpec_Anatomic('P027')
-DiffusionSpec_Anatomic('P028')
-DiffusionSpec_Anatomic('P029')
-DiffusionSpec_Anatomic('P030')
-DiffusionSpec_Anatomic('P031')
-DiffusionSpec_Anatomic('P032')
-DiffusionSpec_Anatomic('P033')
+DiffusionSpec_Voxelwise('P001')
+DiffusionSpec_Voxelwise('P002',3)
+DiffusionSpec_Voxelwise('P003',3)
+DiffusionSpec_Voxelwise('P006')
+DiffusionSpec_Voxelwise('P007')
+DiffusionSpec_Voxelwise('P008')
+DiffusionSpec_Voxelwise('P009')
+DiffusionSpec_Voxelwise('P010')
+DiffusionSpec_Voxelwise('P012')
+DiffusionSpec_Voxelwise('P013')
+DiffusionSpec_Voxelwise('P014')
+DiffusionSpec_Voxelwise('P015')
+DiffusionSpec_Voxelwise('P017')
+DiffusionSpec_Voxelwise('P018')
+DiffusionSpec_Voxelwise('P019')
+DiffusionSpec_Voxelwise('P020')
+DiffusionSpec_Voxelwise('P021')
+DiffusionSpec_Voxelwise('P022')
+DiffusionSpec_Voxelwise('P024')
+DiffusionSpec_Voxelwise('P025')
+DiffusionSpec_Voxelwise('P026')
+DiffusionSpec_Voxelwise('P027')
+DiffusionSpec_Voxelwise('P028')
+DiffusionSpec_Voxelwise('P029')
+DiffusionSpec_Voxelwise('P030')
+%}
+DiffusionSpec_Voxelwise('P031')
+DiffusionSpec_Voxelwise('P032')
+DiffusionSpec_Voxelwise('P033')
 %}
 
 
 %Lesion ROIs
+%{
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P001','Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P002','Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P003','Lesion');
@@ -68,7 +70,7 @@ DiffusionSpec_Anatomic('P033')
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P031','Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P032','Lesion');
 [~,~,~,~,~] = RunNNLS_ML_Lesion('P033','Lesion');
-
+%}
 
 
 

@@ -29,8 +29,9 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
 	    peaksMax=peaksMax(setdiff(1:end,neglPeak));
 	    pksMax=pksMax(setdiff(1:end,neglPeak));
     end
-    
     % check for peaks
+    %disp('peak maxes')
+    %disp(peaksMax)
     if length(peaksMax)<1
         GeoMeanRegionADC_1 = 0;
         RegionFraction1 = 10000; %just to catch it. 
@@ -42,8 +43,10 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
         RegionFraction4 = 0;
     else
         %Peak1
+        %disp('peak 1')
         Peak1End = locsMin(locsMin > peaksMax(1));
         if length(peaksMax) > 1 %if there's more than just 1 peak)
+            %disp('peak 2')
             Peak2End = locsMin(locsMin > peaksMax(2));
             if isempty(Peak2End)
                 [locsMinCurv, pksMinCurv]=peakseekTG(diff(diff(TempAmplitudes)));% Try to find mimimum in Curvature
@@ -54,8 +57,10 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
 
             elseif length(peaksMax) >2 %if there's more than 2 peaks
                 if length(peaksMax) > 3 %if 4 peaks
+                    %disp('peak 3 if 4 peaks')
                     Peak3End = locsMin(locsMin > peaksMax(3)); % then need to define peak3end, and then peak4 end is the end. 
                 else
+                    %disp('peak 3 if 3 peaks')
                     Peak3End = length(ADCBasis); %else it's just the end of the spectrum
                 end
             end
@@ -139,4 +144,5 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
 
 
     end
+    %disp([GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4, RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4])
 end

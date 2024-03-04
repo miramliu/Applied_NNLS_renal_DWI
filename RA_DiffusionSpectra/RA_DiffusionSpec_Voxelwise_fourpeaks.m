@@ -14,8 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
     %PatientNum = varargin{1};
-    %PatientNum = ['RA_01_'  varargin{1}];
-    PatientNum = ['RA_02_'  varargin{1}];
+    PatientNum = ['RA_01_'  varargin{1}];
+    %PatientNum = ['RA_02_'  varargin{1}];
     if nargin == 1 || nargin == 2 && varargin{2} > 10
        
         RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
@@ -28,10 +28,13 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
             ab = 12; %expect only 1,2
         end
 
+        % not doing cortical for RA IFTA 
         % get average medullar ROI
+        %{
         SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
         %fit that and save it
         RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
+        %}
         % get average cortical ROI
         SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab); 
         %fit that and save it
@@ -153,7 +156,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
         currcurve = currcurve(:)/currcurve(1);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
-        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
+        [OutputSpectrum, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
         
         if rsq>0.7 
             if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
@@ -177,6 +180,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
+
+                %PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
                 
             end
         else
@@ -252,6 +257,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
 
 % for standard not sorted ones, with 4 peaks
+%{
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
@@ -264,6 +270,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
         Export_Cell = [Identifying_Info,dataarray];
         writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_fourpeaks')
     end
+%}
 
 
 
@@ -271,14 +278,14 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_sortedFourpeaks'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_sortedFourpeaks_take2'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_sortedFourpeaks')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_sortedFourpeaks_take2')
     end
 
 

@@ -1,5 +1,5 @@
-%{
-DiffusionSpec_Voxelwise('P001')
+
+%DiffusionSpec_Voxelwise('P001')
 DiffusionSpec_Voxelwise('P002',1) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P003',1) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P004')
@@ -13,7 +13,6 @@ DiffusionSpec_Voxelwise('P011')
 DiffusionSpec_Voxelwise('P012')
 DiffusionSpec_Voxelwise('P013') %13 being funky index error at peak 2
 %DiffusionSpec_Voxelwise('P014') % being funky... 
-%}
 DiffusionSpec_Voxelwise('P015')
 DiffusionSpec_Voxelwise('P016')
 DiffusionSpec_Voxelwise('P017') %17 being funky index error at peak 2
@@ -51,9 +50,9 @@ DiffusionSpec_Voxelwise('P044')
 
 
 %% lesion
-
+%{
 DiffusionSpec_Voxelwise('P001',4)
-%}
+
 DiffusionSpec_Voxelwise('P002',4) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P003',4) %must change ROI see line 17 in DiffusionSpect_Voxelwise
 DiffusionSpec_Voxelwise('P004',4)
@@ -101,3 +100,4 @@ DiffusionSpec_Voxelwise('P042',4) %only 1-2
 
 DiffusionSpec_Voxelwise('P043',4) %only 3-4
 DiffusionSpec_Voxelwise('P044',4)
+%}
