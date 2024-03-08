@@ -8,14 +8,13 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
 
 
 RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
-%}
+
 RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P008') %no peak error
 RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
 
-%RA_DiffusionSpec_Voxelwise_fourpeaks('P012') %error
 
 
 RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
@@ -73,22 +72,29 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P060')
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
 %RA_DiffusionSpec_Voxelwise_fourpeaks, line 17 or 18
-%{
-RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P012')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P015')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P018')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P019')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P020')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P021')
+%{
+RA_DiffusionSpec_Voxelwise_spectrumexport('P006')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P007')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P009')
+
+RA_DiffusionSpec_Voxelwise_spectrumexport('P010')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P011')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P012')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P014')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P015')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P018')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P019')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P020')
+RA_DiffusionSpec_Voxelwise_spectrumexport('P021')
 %}
 
+
+%% healthy volunteers (thank you!!)
+%must change 
+RA_DiffusionSpec_Voxelwise_fourpeaks('V004') %change line 16/17 to RA_01
+RA_DiffusionSpec_Voxelwise_fourpeaks('V001') %change line 16/17 to RA_02
+RA_DiffusionSpec_Voxelwise_fourpeaks('V005') %change line 16/17 to RA_01
 
 
 

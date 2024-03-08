@@ -1,4 +1,5 @@
-% five four part peaks, sort into blood, tubule, tissue, and fibrosis
+% for the three part peaks, sort into blood, tubule, and tissue
+% ML 2024 march 6th
 
 
 function SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks)

@@ -16,32 +16,49 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
     %PatientNum = varargin{1};
     PatientNum = ['RA_01_'  varargin{1}];
     %PatientNum = ['RA_02_'  varargin{1}];
-    if nargin == 1 || nargin == 2 && varargin{2} > 10
-       
-        RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
-        medulreg = regexp(RoiTypes, '^.*.M$','match'); medulreg = medulreg(~cellfun('isempty',medulreg));
+    if contains(PatientNum, 'V') %then is volunteer, with two kidneys
+        %first run for right kidney
+        RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
+        ab = 12;
+        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
+        RunAndSave_voxelwise_fourpeaks([PatientNum '_RK'],'C',SignalInput)
 
-        if nargin == 2
-            ab = varargin{2};
+        % now run for Left Kidney
+        RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
+        cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
+        ab = 12;
+        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
+        RunAndSave_voxelwise_fourpeaks([PatientNum '_LK'],'C',SignalInput)
+
+    else %is allograft study, so only one allograft
+        if nargin == 1 || nargin == 2 && varargin{2} > 10
+           
+            RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
+            medulreg = regexp(RoiTypes, '^.*.M$','match'); medulreg = medulreg(~cellfun('isempty',medulreg));
+            cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
+    
+            if nargin == 2
+                ab = varargin{2};
+            else
+                ab = 12; %expect only 1,2
+            end
+    
+            % not doing cortical for RA IFTA 
+            % get average medullar ROI
+            %{
+            SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
+            %fit that and save it
+            RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
+            %}
+            % get average cortical ROI
+            SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab); 
+            %fit that and save it
+            RunAndSave_voxelwise_fourpeaks(PatientNum,'C',SignalInput)
         else
-            ab = 12; %expect only 1,2
+            error('incorrect input, please check.')
         end
-
-        % not doing cortical for RA IFTA 
-        % get average medullar ROI
-        %{
-        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
-        %fit that and save it
-        RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
-        %}
-        % get average cortical ROI
-        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab); 
-        %fit that and save it
-        RunAndSave_voxelwise_fourpeaks(PatientNum,'C',SignalInput)
-    else
-        error('incorrect input')
-    end
+    end  
        
 end
 
@@ -181,7 +198,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
 
-                %PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
+                PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
                 
             end
         else
@@ -277,7 +294,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %% for sorted ones with 4 peaks
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
-    Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
+    Identifying_Info = {PatientNum, [PatientNum '_' ROItype]};
     Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_sortedFourpeaks_take2'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));

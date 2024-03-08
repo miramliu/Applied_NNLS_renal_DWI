@@ -15,11 +15,11 @@ for j = length(SortedresultsPeaks)/2+1:length(SortedresultsPeaks)
     if SortedresultsPeaks(peakNumber) > 0 % for diffusion of the nonzero peaks
         %disp(SortedresultsPeaks(peakNumber))
         %disp(peakNames(peakNumber))
-        text(SortedresultsPeaks(peakNumber), y, peakNames(peakNumber))
+        text(SortedresultsPeaks(peakNumber), y, peakNames(peakNumber), 'FontSize',16)
     end
 end
 
-pause(.01)
+pause(0.01)
 
 hold off
 end

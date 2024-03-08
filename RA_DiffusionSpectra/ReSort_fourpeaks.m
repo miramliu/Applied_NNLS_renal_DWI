@@ -107,7 +107,7 @@ function SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks)
             difference = (abs(CompartmentDiffusions-1.8)); % find all value distance from assumed diffusion peak 
             [~, minidx] = min([difference(idxs(1)), difference(idxs(2)), difference(idxs(3))]); %find the closest to diffusion of the 3 non-zero peaks
             [~, maxidx] = max([difference(idxs(1)), difference(idxs(2)), difference(idxs(3))]); %find the closest to diffusion of the 3 non-zero peaks
-
+            %disp('check 1')
             % added part regarding fraction for determining which one is diffusion peak
             [~, compartmaxidx] = max([CompartmentFractions(idxs(1)), CompartmentFractions(idxs(2)), CompartmentFractions(idxs(3))]); %find the largest of the 3 non-zero peaks
             if compartmaxidx == minidx % if largest peak is also closest to diffusion
@@ -122,9 +122,9 @@ function SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks)
                     f_tissue= CompartmentFractions(tissue_idx);
                     D_tissue= CompartmentDiffusions(tissue_idx);
                     SortingDone = 0; % not done sorting
-
                 else%if largest peak is also closest to diffusion, but is < 0.8
                     % check if there is a peak in the diffusion range
+                    %disp('check 2')
                     if ~any(CompartmentDiffusions >=.8 & CompartmentDiffusions < 5) %if none of the peaks are in that range
                         %then that largest peak that's closest to diffusion but < 0.8 is the diffusion peak
                         tissue_idx = idxs(minidx); %the diffusion index is the index of the closest to 1.8 10-3 
@@ -173,17 +173,21 @@ function SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks)
                         %}
                     % added II march 1 2024
                     else % if closest peak to 1.8 is largest peak, but is not in range....and there IS a peak in that range
+                        %disp('check 3')
                         min_idx = idxs(minidx);
                         max_idx = idxs(maxidx);
                         max_and_min = [minidx, maxidx];
                         allidx = [1,2,3];
                         middleidx = setdiff(allidx, max_and_min); % the one that is inbetween 
                         middle_idx = idxs(middleidx);
-                        if any(CompartmentDiffusions <.8 & CompartmentDiffusions > 5) %if there's a peak above aand below tissue range
+                        %disp(CompartmentDiffusions)
+                        if any(CompartmentDiffusions <.8) && any(CompartmentDiffusions > 5) %if there's one peak above aand one peak below tissue range
                             tissue_idx = middle_idx; % then middle index is it. It's not the min (closeslt, largest, but not in range), and max woudl be even further
                             f_tissue= CompartmentFractions(tissue_idx);
                             D_tissue= CompartmentDiffusions(tissue_idx);
-                            if CompartmentDiffusions(min_idx) < coefficient(max_idx) %if min is less than max, min is the fibrosis
+                            %disp('check 4')
+
+                            if CompartmentDiffusions(min_idx) < CompartmentDiffusions(max_idx) %if min is less than max, min is the fibrosis
                                 f_fibro = CompartmentFractions(min_idx);
                                 D_fibro = CompartmentDiffusions(min_idx);
                                 if CompartmentDiffusions(max_idx) > 50 %if the max is over 50, it's blood
