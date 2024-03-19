@@ -75,14 +75,14 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise_take2'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ReSort_Voxelwise')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ReSort_Voxelwise_take2')
     end
 
     %}

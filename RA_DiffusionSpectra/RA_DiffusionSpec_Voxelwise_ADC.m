@@ -12,10 +12,10 @@
 %% also note: change read in runNNLS_ML to 3mo to have it read and save in correct folder. 
 
 %this is now combining slices and poles BEFORE signal input is fit!
-function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
+function RA_DiffusionSpec_Voxelwise_ADC(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
-    %PatientNum = ['RA_02_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if contains(PatientNum, 'V') %then is volunteer, with two kidneys
         %first run for right kidney
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
@@ -147,129 +147,27 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %% trying tri-exponential!
     
     %straight up
-    ffastvalues = zeros(size(SignalInput,2),1);
-    fmedvalues = zeros(size(SignalInput,2),1);
-    fslowvalues = zeros(size(SignalInput,2),1);
-    ffibrovalues = zeros(size(SignalInput,2),1);
-    Dfastvalues = zeros(size(SignalInput,2),1);
-    Dmedvalues = zeros(size(SignalInput,2),1);
-    Dslowvalues = zeros(size(SignalInput,2),1);
-    Dfibrovalues = zeros(size(SignalInput,2),1);
-    %bvalues = [0,10,30,50,80,120,200,400,800];
-
-    % sorted
-    ffastvalues_sort = zeros(size(SignalInput,2),1);
-    fmedvalues_sort = zeros(size(SignalInput,2),1);
-    fslowvalues_sort = zeros(size(SignalInput,2),1);
-    ffibrovalues_sort = zeros(size(SignalInput,2),1);
-    Dfastvalues_sort = zeros(size(SignalInput,2),1);
-    Dmedvalues_sort = zeros(size(SignalInput,2),1);
-    Dslowvalues_sort = zeros(size(SignalInput,2),1);
-    Dfibrovalues_sort = zeros(size(SignalInput,2),1);
-    rsqvalues = zeros(size(SignalInput,2),1);
-
+    ADCvalues = zeros(size(SignalInput,2),1);
     for voxelj = 1:size(SignalInput,2)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
         currcurve = currcurve(:)/currcurve(1);
-        %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
-        %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
-        [OutputSpectrum, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
-        
-        if rsq>0.7 
-            if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
-                ffastvalues(voxelj,1) = resultsPeaks(1);
-                fmedvalues(voxelj,1) = resultsPeaks(2);
-                fslowvalues(voxelj,1) = resultsPeaks(3);
-                ffibrovalues(voxelj,1) = resultsPeaks(4);
-                Dfastvalues(voxelj,1) = resultsPeaks(5);
-                Dmedvalues(voxelj,1) = resultsPeaks(6);
-                Dslowvalues(voxelj,1) = resultsPeaks(7);
-                Dfibrovalues(voxelj,1) = resultsPeaks(8);
-                rsqvalues(voxelj,1) = rsq;
 
-                % now also try to sort them... 
-                SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks);
-                ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
-                fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
-                fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
-                ffibrovalues_sort(voxelj,1) = SortedresultsPeaks(4);
-                Dfastvalues_sort(voxelj,1) = SortedresultsPeaks(5);
-                Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
-                Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
-                Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
 
-                disp(voxelj)
-                disp(currcurve)
-                PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
-                
-            end
-        else
-            ffastvalues(voxelj,1) = NaN;
-            fmedvalues(voxelj,1) = NaN;
-            fslowvalues(voxelj,1) = NaN;
-            ffibrovalues(voxelj,1) = NaN;
-            Dfastvalues(voxelj,1) = NaN;
-            Dmedvalues(voxelj,1) = NaN;
-            Dslowvalues(voxelj,1) = NaN;
-            Dfibrovalues(voxelj,1) = NaN;
-
-            ffastvalues_sort(voxelj,1) = NaN;
-            fmedvalues_sort(voxelj,1) = NaN;
-            fslowvalues_sort(voxelj,1) = NaN;
-            ffibrovalues_sort(voxelj,1) = NaN;
-            Dfastvalues_sort(voxelj,1) = NaN;
-            Dmedvalues_sort(voxelj,1) = NaN;
-            Dslowvalues_sort(voxelj,1) = NaN;
-            Dfibrovalues_sort(voxelj,1) = NaN;
-            rsqvalues(voxelj,1) = NaN;
-        end
+        % only keep 50, 400, and 800 
+        b = [0,10,30,50,80,120,200,400,800];
+        b = [b(4), b(8), b(9)];
+        data = [currcurve(4), currcurve(8), currcurve(9)];
+        % ADC monoexp fit
+        ln_S=log(data);
+        p = polyfit(b, ln_S, 1);
+        ADC = -(p(1));
+        ADCvalues(voxelj,1) = ADC*1000;
     end
-
     %remove NaN before doing stats
-    ffastvalues=ffastvalues(~isnan(ffastvalues));
-    fmedvalues=fmedvalues(~isnan(fmedvalues));
-    fslowvalues=fslowvalues(~isnan(fslowvalues));
-    ffibrovalues=ffibrovalues(~isnan(ffibrovalues));
-    Dfastvalues=Dfastvalues(~isnan(Dfastvalues));
-    Dmedvalues=Dmedvalues(~isnan(Dmedvalues));
-    Dslowvalues=Dslowvalues(~isnan(Dslowvalues));
-    Dfibrovalues=Dfibrovalues(~isnan(Dfibrovalues));
-    rsqvalues=rsqvalues(~isnan(rsqvalues));
+    ADCvalues=ADCvalues(~isnan(ADCvalues));
 
-    dataarray={mean(ffastvalues), median(ffastvalues), std(ffastvalues), kurtosis(ffastvalues), skewness(ffastvalues),...
-                        mean(fmedvalues), median(fmedvalues), std(fmedvalues), kurtosis(fmedvalues), skewness(fmedvalues),...
-                        mean(fslowvalues), median(fslowvalues), std(fslowvalues), kurtosis(fslowvalues), skewness(fslowvalues),...
-                        mean(ffibrovalues), median(ffibrovalues), std(ffibrovalues), kurtosis(ffibrovalues), skewness(ffibrovalues),...
-                        mean(Dfastvalues), median(Dfastvalues), std(Dfastvalues), kurtosis(Dfastvalues), skewness(Dfastvalues),...
-                        mean(Dmedvalues), median(Dmedvalues), std(Dmedvalues), kurtosis(Dmedvalues), skewness(Dmedvalues),...
-                        mean(Dslowvalues), median(Dslowvalues), std(Dslowvalues), kurtosis(Dslowvalues), skewness(Dslowvalues),...
-                        mean(Dfibrovalues), median(Dfibrovalues), std(Dfibrovalues), kurtosis(Dfibrovalues), skewness(Dfibrovalues),...
-                        size(ffastvalues,1),size(SignalInput,2),...
-                        mean(rsqvalues), std(rsqvalues)};
+    dataarray={mean(ADCvalues), median(ADCvalues), std(ADCvalues), kurtosis(ADCvalues), skewness(ADCvalues)};
     
-    
-    %remove NaN before doing stats
-    ffastvalues_sort=ffastvalues_sort(~isnan(ffastvalues_sort));
-    fmedvalues_sort=fmedvalues_sort(~isnan(fmedvalues_sort));
-    fslowvalues_sort=fslowvalues_sort(~isnan(fslowvalues_sort));
-    ffibrovalues_sort=ffibrovalues_sort(~isnan(ffibrovalues_sort));
-    Dfastvalues_sort=Dfastvalues_sort(~isnan(Dfastvalues_sort));
-    Dmedvalues_sort=Dmedvalues_sort(~isnan(Dmedvalues_sort));
-    Dslowvalues_sort=Dslowvalues_sort(~isnan(Dslowvalues_sort));
-    Dfibrovalues_sort=Dfibrovalues_sort(~isnan(Dfibrovalues_sort));
-
-    dataarray_sort={mean(ffastvalues_sort), median(ffastvalues_sort), std(ffastvalues_sort), kurtosis(ffastvalues_sort), skewness(ffastvalues_sort),...
-                        mean(fmedvalues_sort), median(fmedvalues_sort), std(fmedvalues_sort), kurtosis(fmedvalues_sort), skewness(fmedvalues_sort),...
-                        mean(fslowvalues_sort), median(fslowvalues_sort), std(fslowvalues_sort), kurtosis(fslowvalues_sort), skewness(fslowvalues_sort),...
-                        mean(ffibrovalues_sort), median(ffibrovalues_sort), std(ffibrovalues_sort), kurtosis(ffibrovalues_sort), skewness(ffibrovalues_sort),...
-                        mean(Dfastvalues_sort), median(Dfastvalues_sort), std(Dfastvalues_sort), kurtosis(Dfastvalues_sort), skewness(Dfastvalues_sort),...
-                        mean(Dmedvalues_sort), median(Dmedvalues_sort), std(Dmedvalues_sort), kurtosis(Dmedvalues_sort), skewness(Dmedvalues_sort),...
-                        mean(Dslowvalues_sort), median(Dslowvalues_sort), std(Dslowvalues_sort), kurtosis(Dslowvalues_sort), skewness(Dslowvalues_sort),...
-                        mean(Dfibrovalues_sort), median(Dfibrovalues_sort), std(Dfibrovalues_sort), kurtosis(Dfibrovalues_sort), skewness(Dfibrovalues_sort),...
-                        size(ffastvalues_sort,1),size(SignalInput,2),...
-                        mean(rsqvalues), std(rsqvalues)};
-
-
 
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
@@ -297,14 +195,14 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {PatientNum, [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_sortedFourpeaks_take2'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ClinicalADC'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
-        Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_sortedFourpeaks_take2')
+        Export_Cell = [Identifying_Info,dataarray];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ClinicalADC')
     end
 
 

@@ -4,8 +4,8 @@
 % now does it with up to four peaks! (rather than the assumed max of 3)
 function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_fourpeaks(varargin)
 
-    addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
-    addpath ../../Applied_NNLS_renal_DWI/rNNLS
+    %addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
+    %addpath ../../Applied_NNLS_renal_DWI/rNNLS
 %    disp(PatientNum)
 
     b_values = [0,10,30,50,80,120,200,400,800]; %if original 9 

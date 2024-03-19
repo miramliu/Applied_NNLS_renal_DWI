@@ -16,18 +16,18 @@ function SignalInput = ReadPatientDWIData_flexible(varargin)
         end
     end
 
-    %{
-    pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
+    
+    pathtodata = '/Users/miraliu/Desktop/Data/PN/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     %}
 
   %% for test-retest 
-
+%{
     disp('for test-retest')
     %for test-retest
     pathtodata = '/Users/miraliu/Desktop/Data/PartialNephrectomy_TestRetest/';
     pathtoCSV = [pathtodata '/P011_IVIM_Scan1_test.csv']
-
+%}
 
     %read data
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');    

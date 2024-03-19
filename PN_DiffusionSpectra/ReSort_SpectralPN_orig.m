@@ -1,9 +1,8 @@
 % for the three part peaks, sort into blood, tubule, and tissue
-% ML 2024 march 14thth
+% ML 2024 march 6th
 
-%%NOTE, THRESHOLD FOR BLOOD WAS CHANGED FROM 10 TO 50, BUT IS KEPT AT 10 FOR PAPER AND PRESENTATION. 50 SEEMED BEST FOR ALLOGRAFTS
 
-function SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks)
+function SortedresultsPeaks = ReSort_SpectralPN_orig(resultsPeaks)
 
     %% for note... 
     %disp('------------------------------------------------------------------------- ')
@@ -37,8 +36,8 @@ function SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks)
             %if non-tissue peak is bigger
             if CompartmentDiffusions(max_idx) > CompartmentDiffusions(tissue_idx) %assumed true, but lazy so keeping this.
 
-                %if it's > 50, it's blood flow, else it's tubular?
-                if CompartmentDiffusions(max_idx) > 50 %Changed to 50. which was used for allograft. 
+                %if it's > 10, it's blood flow
+                if CompartmentDiffusions(max_idx) > 10 
                     f_blood = CompartmentFractions(max_idx);
                     D_blood = CompartmentDiffusions(max_idx);
                     

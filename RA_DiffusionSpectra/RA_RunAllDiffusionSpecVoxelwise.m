@@ -2,100 +2,102 @@
 
 %% Run all renal allograft IVIM cases
 %{
-RA_DiffusionSpec_Voxelwise_fourpeaks('P001')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P002')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P003')
+RA_DiffusionSpec_Voxelwise_ADC('P001')
+RA_DiffusionSpec_Voxelwise_ADC('P002')
+RA_DiffusionSpec_Voxelwise_ADC('P003')
 
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P006')
+RA_DiffusionSpec_Voxelwise_ADC('P006')
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P007')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P008') %no peak error
-RA_DiffusionSpec_Voxelwise_fourpeaks('P009')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P010')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P011')
-
-
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P014')
-
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P017')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P018')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P019')
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P021')
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P023')
-
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P026')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P027')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P028')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P029')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P030')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P031')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P032')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P033')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P034')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P035')
-
-RA_DiffusionSpec_Voxelwise_fourpeaks('P037')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P038')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P039')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P040')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P041')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P042')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P043')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P044')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P045')
+RA_DiffusionSpec_Voxelwise_ADC('P007')
+RA_DiffusionSpec_Voxelwise_ADC('P008') %no peak error
+RA_DiffusionSpec_Voxelwise_ADC('P009')
+RA_DiffusionSpec_Voxelwise_ADC('P010')
+RA_DiffusionSpec_Voxelwise_ADC('P011')
 
 
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P049') % no peak error
+RA_DiffusionSpec_Voxelwise_ADC('P014')
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P050')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P051')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P052')
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P054')
+RA_DiffusionSpec_Voxelwise_ADC('P017')
+RA_DiffusionSpec_Voxelwise_ADC('P018')
+RA_DiffusionSpec_Voxelwise_ADC('P019')
 
-RA_DiffusionSpec_Voxelwise_fourpeaks('P055')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P056')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P057')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P058')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P059')
-RA_DiffusionSpec_Voxelwise_fourpeaks('P060')
+RA_DiffusionSpec_Voxelwise_ADC('P021')
+
+RA_DiffusionSpec_Voxelwise_ADC('P023')
+
+
+RA_DiffusionSpec_Voxelwise_ADC('P026')
+RA_DiffusionSpec_Voxelwise_ADC('P027')
+RA_DiffusionSpec_Voxelwise_ADC('P028')
+RA_DiffusionSpec_Voxelwise_ADC('P029')
+RA_DiffusionSpec_Voxelwise_ADC('P030')
+RA_DiffusionSpec_Voxelwise_ADC('P031')
+RA_DiffusionSpec_Voxelwise_ADC('P032')
+RA_DiffusionSpec_Voxelwise_ADC('P033')
+RA_DiffusionSpec_Voxelwise_ADC('P034')
+RA_DiffusionSpec_Voxelwise_ADC('P035')
+
+RA_DiffusionSpec_Voxelwise_ADC('P037')
+RA_DiffusionSpec_Voxelwise_ADC('P038')
+RA_DiffusionSpec_Voxelwise_ADC('P039')
+RA_DiffusionSpec_Voxelwise_ADC('P040')
+RA_DiffusionSpec_Voxelwise_ADC('P041')
+RA_DiffusionSpec_Voxelwise_ADC('P042')
+RA_DiffusionSpec_Voxelwise_ADC('P043')
+RA_DiffusionSpec_Voxelwise_ADC('P044')
+RA_DiffusionSpec_Voxelwise_ADC('P045')
+
+
+
+RA_DiffusionSpec_Voxelwise_ADC('P049') % no peak error
+
+RA_DiffusionSpec_Voxelwise_ADC('P050')
+RA_DiffusionSpec_Voxelwise_ADC('P051')
+RA_DiffusionSpec_Voxelwise_ADC('P052')
+
+RA_DiffusionSpec_Voxelwise_ADC('P054')
+
+RA_DiffusionSpec_Voxelwise_ADC('P055')
+RA_DiffusionSpec_Voxelwise_ADC('P056')
+RA_DiffusionSpec_Voxelwise_ADC('P057')
+RA_DiffusionSpec_Voxelwise_ADC('P058')
+RA_DiffusionSpec_Voxelwise_ADC('P059')
+RA_DiffusionSpec_Voxelwise_ADC('P060')
 
 %}
 
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
-%RA_DiffusionSpec_Voxelwise_fourpeaks, line 17 or 18
+%RA_DiffusionSpec_Voxelwise_ADC, line 17 or 18
 
-%{
-RA_DiffusionSpec_Voxelwise_spectrumexport('P006')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P007')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P009')
 
-RA_DiffusionSpec_Voxelwise_spectrumexport('P010')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P011')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P012')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P014')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P015')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P018')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P019')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P020')
-RA_DiffusionSpec_Voxelwise_spectrumexport('P021')
+RA_DiffusionSpec_Voxelwise_ADC('P006')
+RA_DiffusionSpec_Voxelwise_ADC('P007')
+RA_DiffusionSpec_Voxelwise_ADC('P009')
+
+RA_DiffusionSpec_Voxelwise_ADC('P010')
+RA_DiffusionSpec_Voxelwise_ADC('P011')
+RA_DiffusionSpec_Voxelwise_ADC('P012')
+RA_DiffusionSpec_Voxelwise_ADC('P014')
+RA_DiffusionSpec_Voxelwise_ADC('P015')
+RA_DiffusionSpec_Voxelwise_ADC('P018')
+RA_DiffusionSpec_Voxelwise_ADC('P019')
+RA_DiffusionSpec_Voxelwise_ADC('P020')
+RA_DiffusionSpec_Voxelwise_ADC('P021')
 %}
 
 
 %% healthy volunteers (thank you!!)
 %must change 
-RA_DiffusionSpec_Voxelwise_fourpeaks('V004') %change line 16/17 to RA_01
-RA_DiffusionSpec_Voxelwise_fourpeaks('V001') %change line 16/17 to RA_02
-RA_DiffusionSpec_Voxelwise_fourpeaks('V005') %change line 16/17 to RA_01
+%{
+RA_DiffusionSpec_Voxelwise_ADC('V004') %change line 16/17 to RA_01
+RA_DiffusionSpec_Voxelwise_ADC('V001') %change line 16/17 to RA_02
+RA_DiffusionSpec_Voxelwise_ADC('V005') %change line 16/17 to RA_01
 
 
 
 
+%}
