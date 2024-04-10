@@ -18,12 +18,13 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
     %PatientNum = ['RA_02_'  varargin{1}];
     if contains(PatientNum, 'V') %then is volunteer, with two kidneys
         %first run for right kidney
+        %{
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
         ab = 12;
         SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
         RunAndSave_voxelwise_fourpeaks([PatientNum '_RK'],'C',SignalInput)
-
+        %}
         % now run for Left Kidney
         RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
@@ -198,9 +199,9 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
 
-                disp(voxelj)
-                disp(currcurve)
-                PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
+                %disp(voxelj)
+                %disp(currcurve)
+                %PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
                 
             end
         else

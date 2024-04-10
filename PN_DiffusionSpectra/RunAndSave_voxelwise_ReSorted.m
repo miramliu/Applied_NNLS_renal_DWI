@@ -76,6 +76,7 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
     Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise_take2'); %read only identifying info that already exists
+    %% Resort voxelwise take 2 is with boundary of 50, Resort voxelwise is with boundary of 10!
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
