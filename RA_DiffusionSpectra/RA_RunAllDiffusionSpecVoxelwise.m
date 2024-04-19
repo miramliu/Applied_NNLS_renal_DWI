@@ -8,27 +8,25 @@ RA_DiffusionSpec_Voxelwise_ADC('P003')
 
 
 RA_DiffusionSpec_Voxelwise_ADC('P006')
-
 RA_DiffusionSpec_Voxelwise_ADC('P007')
-RA_DiffusionSpec_Voxelwise_ADC('P008') %no peak error
+RA_DiffusionSpec_Voxelwise_ADC('P008')  
 RA_DiffusionSpec_Voxelwise_ADC('P009')
 RA_DiffusionSpec_Voxelwise_ADC('P010')
 RA_DiffusionSpec_Voxelwise_ADC('P011')
-
-
-
+RA_DiffusionSpec_Voxelwise_ADC('P012')
+                                        % no P013 IVIM
 RA_DiffusionSpec_Voxelwise_ADC('P014')
-
-
+                                        % no P015 deidentified dicomes available
+RA_DiffusionSpec_Voxelwise_ADC('P016')
 RA_DiffusionSpec_Voxelwise_ADC('P017')
 RA_DiffusionSpec_Voxelwise_ADC('P018')
 RA_DiffusionSpec_Voxelwise_ADC('P019')
-
+                                        % no MRI
 RA_DiffusionSpec_Voxelwise_ADC('P021')
-
+                                        % no MRI
 RA_DiffusionSpec_Voxelwise_ADC('P023')
-
-
+RA_DiffusionSpec_Voxelwise_ADC('P024')
+                                        % no MRI
 RA_DiffusionSpec_Voxelwise_ADC('P026')
 RA_DiffusionSpec_Voxelwise_ADC('P027')
 RA_DiffusionSpec_Voxelwise_ADC('P028')
@@ -39,7 +37,7 @@ RA_DiffusionSpec_Voxelwise_ADC('P032')
 RA_DiffusionSpec_Voxelwise_ADC('P033')
 RA_DiffusionSpec_Voxelwise_ADC('P034')
 RA_DiffusionSpec_Voxelwise_ADC('P035')
-
+                                        % error in registration
 RA_DiffusionSpec_Voxelwise_ADC('P037')
 RA_DiffusionSpec_Voxelwise_ADC('P038')
 RA_DiffusionSpec_Voxelwise_ADC('P039')
@@ -49,17 +47,15 @@ RA_DiffusionSpec_Voxelwise_ADC('P042')
 RA_DiffusionSpec_Voxelwise_ADC('P043')
 RA_DiffusionSpec_Voxelwise_ADC('P044')
 RA_DiffusionSpec_Voxelwise_ADC('P045')
-
-
-
-RA_DiffusionSpec_Voxelwise_ADC('P049') % no peak error
-
+                                        % no MRI
+                                        % no MRI
+                                        % no MRI
+RA_DiffusionSpec_Voxelwise_ADC('P049') 
 RA_DiffusionSpec_Voxelwise_ADC('P050')
 RA_DiffusionSpec_Voxelwise_ADC('P051')
 RA_DiffusionSpec_Voxelwise_ADC('P052')
-
+                                        % no MRI
 RA_DiffusionSpec_Voxelwise_ADC('P054')
-
 RA_DiffusionSpec_Voxelwise_ADC('P055')
 RA_DiffusionSpec_Voxelwise_ADC('P056')
 RA_DiffusionSpec_Voxelwise_ADC('P057')
@@ -77,7 +73,7 @@ RA_DiffusionSpec_Voxelwise_ADC('P060')
 RA_DiffusionSpec_Voxelwise_ADC('P006')
 RA_DiffusionSpec_Voxelwise_ADC('P007')
 RA_DiffusionSpec_Voxelwise_ADC('P009')
-
+RA_DiffusionSpec_Voxelwise_ADC('P008')
 RA_DiffusionSpec_Voxelwise_ADC('P010')
 RA_DiffusionSpec_Voxelwise_ADC('P011')
 RA_DiffusionSpec_Voxelwise_ADC('P012')

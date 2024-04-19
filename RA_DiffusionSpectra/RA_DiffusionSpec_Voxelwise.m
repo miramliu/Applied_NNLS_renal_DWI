@@ -14,8 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
-    %PatientNum = ['RA_02_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if nargin == 1 || nargin == 2 && varargin{2} > 10
        
         RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
@@ -68,12 +68,22 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
         end
     end
 
-    %% for RENAL ALLOGRAFT
+%% for RENAL ALLOGRAFT, sara rois
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
     pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
+%}
 
+
+
+%% for Swathi ICC ROIs
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs/';
+    pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv'];
     
-        %% for each type, this is Poles
+
+
+
+    %% for each type, this is Poles
     count = 0;
     for type = 1:size(ROItypes,2)
         ROItype = string(PatientNum) + '_' + string(ROItypes{1,type});
@@ -184,11 +194,15 @@ function RunAndSave_voxelwise(PatientNum, ROItype,SignalInput)
         %plot(OutputDiffusionSpectrum);
         %pause(1)
 
-    
-
+%% for RENAL ALLOGRAFT, sara rois
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
+%}
 
+%% for Swathi ICC ROIs
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs';
+    ExcelFileName=[pathtodata, '/','RA_Swathi_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
 
 
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n

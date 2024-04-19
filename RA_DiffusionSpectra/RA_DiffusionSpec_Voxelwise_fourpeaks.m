@@ -14,8 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
-    %PatientNum = ['RA_02_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if contains(PatientNum, 'V') %then is volunteer, with two kidneys
         %first run for right kidney
         %{
@@ -89,11 +89,20 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
         end
     end
 
-    %% for RENAL ALLOGRAFT
+%% for RENAL ALLOGRAFT, sara rois
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
     pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
+%}
 
-    
+
+
+%% for Swathi ICC ROIs
+
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs/';
+    pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv'];
+%}  
+
         %% for each type, this is Poles
     count = 0;
     for type = 1:size(ROItypes,2)
@@ -271,9 +280,17 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                         mean(rsqvalues), std(rsqvalues)};
 
 
-
+%% for RENAL ALLOGRAFT, sara rois
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
+%}
+
+%% for Swathi ICC ROIs
+
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs';
+    ExcelFileName=[pathtodata, '/','RA_Swathi_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
+%}
 
 
 % for standard not sorted ones, with 4 peaks

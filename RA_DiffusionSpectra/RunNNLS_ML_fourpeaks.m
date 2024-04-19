@@ -101,9 +101,19 @@ end
 % to be able to get the data for the DWI analysis... hopefully.
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
+
+%% original
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
-    
+%}
+
+%% ICC with Swathi ROIs
+
+    pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
+    pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
+%}
+
     %read data
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');    
     ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);
