@@ -45,6 +45,8 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
                 if isempty(Peak2End) % if it's still empty
                     peaksMax = peaksMax(1); % remove second peaks
                 end
+            elseif length(peaksMax) >2 %if there's more than 2 peaks
+                Peak3End = length(ADCBasis); %else it's just the end of the spectrum
             end
             %% for case 0019
             %{

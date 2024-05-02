@@ -14,8 +14,8 @@
 %this is now combining slices and poles BEFORE signal input is fit!
 function RA_DiffusionSpec_Voxelwise_ADC(varargin)
     %PatientNum = varargin{1};
-    PatientNum = ['RA_01_'  varargin{1}];
-    %PatientNum = ['RA_02_'  varargin{1}];
+    %PatientNum = ['RA_01_'  varargin{1}];
+    PatientNum = ['RA_02_'  varargin{1}];
     if contains(PatientNum, 'V') %then is volunteer, with two kidneys
         %first run for right kidney
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
@@ -179,7 +179,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 %% for RENAL ALLOGRAFT, sara rois
 
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
-    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
+    ExcelFileName=[pathtodata, '/','xxRA_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
 %}
 
 %% for Swathi ICC ROIs

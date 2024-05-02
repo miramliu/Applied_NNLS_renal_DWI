@@ -41,6 +41,9 @@ function StackedProcessed = CreateSpectralFigure()
             end
         end
     end
+
+    fD_spectral = MakeFDmasks(StackedProcessed);
+    
 end
 
 
@@ -62,4 +65,24 @@ function StackedDicoms = MakeStackedDicoms()
         StackedDicoms(:,:,j+1)=X;
     
     end
+end
+
+
+
+
+function fD_spectral = MakeFDmasks(StackedProcessed)
+    fD_vasc = squeeze(StackedProcessed(:,:,1)).*squeeze(StackedProcessed(:,:,5));
+    fD_tubule = squeeze(StackedProcessed(:,:,2)).*squeeze(StackedProcessed(:,:,6));
+    fD_parench = squeeze(StackedProcessed(:,:,3)).*squeeze(StackedProcessed(:,:,7));
+    fD_fibro = squeeze(StackedProcessed(:,:,4)).*squeeze(StackedProcessed(:,:,8));
+    fD_slow = squeeze(StackedProcessed(:,:,5)).*squeeze(StackedProcessed(:,:,9));
+    
+    fD_spectral=zeros(84, 200, 3);
+    fD_spectral(:, :, 1) = fD_vasc;
+    fD_spectral(:, :, 2) = fD_tubule;
+    fD_spectral(:, :, 3) = fD_parench;
+    fD_spectral(:, :, 3) = fD_fibro;
+    fD_spectral(:, :, 3) = fD_slow;
+    save('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/StackedSpectral_fD.mat', 'fD_spectral');
+
 end
