@@ -1,5 +1,5 @@
 %% saving and running on signal input
-function RunAndSave_AnisotropySimulation(ImportSheetName)
+function RunAndSave_AnisotropySimulation_9bvals(ImportSheetName)
 
 %% read in data
     pathtodata = '/Users/miraliu/Desktop/PostDocCode/Multiexp_Simulations_python/';
@@ -14,8 +14,13 @@ function RunAndSave_AnisotropySimulation(ImportSheetName)
     for j = 1:size(DataFrame,1)
         RunNum = DataFrame(j,'Run Number');
         DataCurve_j = DataFrame(j,["b0","b10","b30","b50","b80","b120","b200","b400","b800","b1100","b1380"]);
-        SignalInput = zeros(11,1);
+
+        %% now cut the data, remove the last two
+        DataCurve_j=DataCurve_j(:,1:end-2);
+        
+        SignalInput = zeros(9,1);
         SignalInput = SignalInput + table2array(DataCurve_j)';
+
         Run_SpectralFit(RunNum, SignalInput, ImportSheetName) % export and import sheet arae same name... 
     end
 end
@@ -33,7 +38,7 @@ function Run_SpectralFit(RunNum, SignalInput, ExportSheetName)
     addpath ../../Applied_NNLS_renal_DWI/PN_DiffusionSpectra/
 
     
-    b_values = [0,10,30,50,80,120,200,400,800, 1100, 1380]; % simulated b values
+    b_values = [0,10,30,50,80,120,200,400,800];%, 1100, 1380]; % simulated b values
     %% saving and running on signal input
 
     for voxelj = 1:size(SignalInput,2)
@@ -54,7 +59,7 @@ function Run_SpectralFit(RunNum, SignalInput, ExportSheetName)
     pathtodata = '/Users/miraliu/Desktop/PostDocCode/Multiexp_Simulations_python/';
     %ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits.xlsx']; % All results will save in excel file
     %ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240529.xlsx']; % All results will save in excel file
-    ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240611.xlsx']; % All results will save in excel file
+    ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240611_9bvals.xlsx']; % All results will save in excel file
 
     % i hate matlab. so ineffficient my god. 
     why = table2array(RunNum);

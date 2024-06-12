@@ -37,6 +37,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
     else
         %Peak1
         Peak1End = locsMin(locsMin > peaksMax(1));
+        
         if length(peaksMax) > 1 %if there's more than just 1 peak)
             Peak2End = locsMin(locsMin > peaksMax(2));
             if isempty(Peak2End)
@@ -48,19 +49,15 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFracti
             elseif length(peaksMax) >2 %if there's more than 2 peaks
                 Peak3End = length(ADCBasis); %else it's just the end of the spectrum
             end
-            %% for case 0019
-            %{
-            if Peak2End == Peak1End %if they're equal, just one weird case
-                [locsMax, pksMax]=peakseekTG(TempAmplitudes,1,realmin);
-                peaksMax = locsMax(pksMax ~= 0); %go with the original 
-            end
-            %}
         end
         
         TotalArea = sum(TempAmplitudes);
-        
-        range1 = 1:Peak1End(1); %ADCBasis >= ADCBasis(1)  &  ADCBasis < ADCBasis(Peak1End(1)+1);
-        
+        if ~isempty(Peak1End)
+            range1 = 1:Peak1End(1); %ADCBasis >= ADCBasis(1)  &  ADCBasis < ADCBasis(Peak1End(1)+1);
+        else
+            range1 = 1:length(ADCBasis);
+        end
+       
         ADCBasisRange1 = ADCBasis(range1);
         ADCampsRange1 = TempAmplitudes(range1);
         RegionFraction1 = sum( ADCampsRange1 ) / TotalArea;

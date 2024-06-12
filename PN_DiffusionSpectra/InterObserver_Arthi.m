@@ -4,8 +4,8 @@
 
 % kidney ROIs
 % done with RunNNLS_ML and CVNNLS and NNLS_result_mod_ML
-%{
-DiffusionSpec_Voxelwise('P001')
+
+%DiffusionSpec_Voxelwise('P001')
 DiffusionSpec_Voxelwise('P002',3)
 DiffusionSpec_Voxelwise('P003',3)
 DiffusionSpec_Voxelwise('P006')

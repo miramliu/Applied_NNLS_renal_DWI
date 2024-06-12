@@ -134,12 +134,13 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
 
     
 %% for original baseline
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/PN/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     %}
     
 %% for interobserver
-%{
+
     pathtodata = '/Users/miraliu/Desktop/Data/PN/Arthi Test ROIs/';
     pathtoCSV = [pathtodata PatientNum '_Arthi_IVIM.csv'];
     %}

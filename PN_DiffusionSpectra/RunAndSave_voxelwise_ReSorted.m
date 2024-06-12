@@ -28,7 +28,11 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
             if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
 
                 % now  try to sort them... 
-                SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks);
+                %SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks);
+
+                % changed may 2024 to jonas sorting to test! 
+                SortedresultsPeaks = ReSort_Spectral_Jonas(resultsPeaks);
+
                 ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
                 fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
                 fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
@@ -70,12 +74,12 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     
 
     %% for normal baseline
-    
+    %{
     pathtodata = '/Users/miraliu/Desktop/Data/PN/ML_PartialNephrectomy_Export';
     ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise_take2'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise_JONAS'); %read only identifying info that already exists
     %% Resort voxelwise take 2 is with boundary of 50, Resort voxelwise is with boundary of 10!
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
@@ -83,7 +87,7 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ReSort_Voxelwise_take2')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ReSort_Voxelwise_JONAS')
     end
 
     %}
@@ -105,18 +109,18 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     end
     %}
     %% for interobserver
-    %{
+    
     pathtodata = '/Users/miraliu/Desktop/Data/PN/Arthi test ROIs';
     ExcelFileName=[pathtodata, '/','PN_Arthi_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise Sorted Spectral'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise Sorted Spectral JONAS'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise Sorted Spectral')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise Sorted Spectral JONAS')
     end
     %}
 end
