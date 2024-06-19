@@ -1,4 +1,7 @@
 function PlotSortedPeaks(ii, OutputSpectrum, SortedresultsPeaks)
+
+
+
 figure(2);
 ADCBasisSteps = 300; %(??)
 ADCBasis = logspace( log10(5), log10(2200), ADCBasisSteps);
@@ -25,7 +28,7 @@ for j = length(SortedresultsPeaks)/2+1:length(SortedresultsPeaks)
     if SortedresultsPeaks(peakNumber) > 0 % for diffusion of the nonzero peaks
         %disp(SortedresultsPeaks(peakNumber))
         %disp(peakNames(peakNumber))
-        text(SortedresultsPeaks(peakNumber), y, peakNames(peakNumber), 'FontSize',16)
+        %text(SortedresultsPeaks(peakNumber), y, peakNames(peakNumber), 'FontSize',16)
     end
 end
 

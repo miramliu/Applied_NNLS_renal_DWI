@@ -23,6 +23,7 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
         else
             PatientNum = ['RA_01_' varargin{1}];
         end
+        %{
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
         ab = 12;
@@ -208,7 +209,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
         currcurve = currcurve(:)/currcurve(1);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
-        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
+        [OutputSpectrum, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
         
         if rsq>0.7 
             if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
@@ -223,8 +224,19 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 rsqvalues(voxelj,1) = rsq;
 
                 % now also try to sort them... 
-                %{
+                
                 SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks);
+                ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
+                fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
+                fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
+                ffibrovalues_sort(voxelj,1) = SortedresultsPeaks(4);
+                Dfastvalues_sort(voxelj,1) = SortedresultsPeaks(5);
+                Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
+                Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
+                Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
+                
+                %{
+                SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks);
                 ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
                 fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
                 fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
@@ -235,20 +247,18 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
                 %}
 
-                SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks);
-                ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
-                fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
-                fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
-                ffibrovalues_sort(voxelj,1) = SortedresultsPeaks(4);
-                Dfastvalues_sort(voxelj,1) = SortedresultsPeaks(5);
-                Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
-                Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
-                Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
-
-
                 %disp(voxelj)
                 %disp(currcurve)
-                %PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
+
+                if nnz(SortedresultsPeaks) ==6 && SortedresultsPeaks(1) > 0 && SortedresultsPeaks(4)==0 
+                    b_values = [0,10,30,50,80,120,200,400,800]; %if original 9 
+                    figure(1), 
+                    plot(b_values, currcurve), hold on, scatter(b_values, currcurve),
+                    hold off;
+    
+                    disp([SortedresultsPeaks(1),SortedresultsPeaks(2),SortedresultsPeaks(3), SortedresultsPeaks(5),SortedresultsPeaks(6),SortedresultsPeaks(7)])
+                    PlotSortedPeaks(voxelj, OutputSpectrum, SortedresultsPeaks)
+                end
                 
             end
         else
@@ -351,7 +361,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
     %% for sorted ones with 4 peaks
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
-
+%{
     Identifying_Info = {PatientNum, [PatientNum '_' ROItype]};
     Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_4peak_JONAS'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
@@ -362,6 +372,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
         Export_Cell = [Identifying_Info,dataarray_sort];
         writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_4peak_JONAS')
     end
+    %}
 
 
 end

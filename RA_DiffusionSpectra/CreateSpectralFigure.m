@@ -2,8 +2,8 @@
 
 function StackedProcessed = CreateSpectralFigure()
     %StackedDicoms = MakeStackedDicoms();
-    load('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/AllograftMask.mat', 'AllograftMask')
-    load('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/StackedDicoms.mat','StackedDicoms')
+    load('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/AllograftMask.mat', 'AllograftMask')
+    load('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/StackedDicoms.mat','StackedDicoms')
 
     AllograftMaskedDicoms = squeeze(StackedDicoms(:,:,:)).*AllograftMask;
     [nx,ny] = size(squeeze(StackedDicoms(:,:,1)));
@@ -49,7 +49,7 @@ end
 
 function StackedDicoms = MakeStackedDicoms()
     %% Stack dicoms
-    check = dicomread('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/IM-0028-0001-0001.dcm');
+    check = dicomread('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/IM-0028-0001-0001.dcm');
     [nx,ny] = size(check);
     
     StackedDicoms = zeros(nx,ny,9); %stacked dicoms nx, ny, by b-values
@@ -60,8 +60,8 @@ function StackedDicoms = MakeStackedDicoms()
         elseif k < 100
             k = strcat('0', string(k));
         end
-        strcat('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/IM-0028-00',string(k), '-0001.dcm')
-        X = dicomread(strcat('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/IM-0028-0',string(k), '-0001.dcm'));
+        strcat('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/IM-0028-00',string(k), '-0001.dcm')
+        X = dicomread(strcat('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/IM-0028-0',string(k), '-0001.dcm'));
         StackedDicoms(:,:,j+1)=X;
     
     end
@@ -81,8 +81,8 @@ function fD_spectral = MakeFDmasks(StackedProcessed)
     fD_spectral(:, :, 1) = fD_vasc;
     fD_spectral(:, :, 2) = fD_tubule;
     fD_spectral(:, :, 3) = fD_parench;
-    fD_spectral(:, :, 3) = fD_fibro;
-    fD_spectral(:, :, 3) = fD_slow;
-    save('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_055_TraceForFigure/StackedSpectral_fD.mat', 'fD_spectral');
+    fD_spectral(:, :, 4) = fD_fibro;
+    fD_spectral(:, :, 5) = fD_slow;
+    save('/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/RA_01_028_TraceForFigure/StackedSpectral_fD.mat', 'fD_spectral');
 
 end
