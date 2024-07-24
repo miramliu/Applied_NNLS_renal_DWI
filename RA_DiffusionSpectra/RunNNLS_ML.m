@@ -1,11 +1,11 @@
 %give signal input, will fit and output the peaks
 % can also give pt number and ROI type
 
-% now does it with up to four peaks! (rather than the assumed max of 3)
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_fourpeaks(varargin)
 
-    %addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
-    %addpath ../../Applied_NNLS_renal_DWI/rNNLS
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML(varargin)
+
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
+    addpath ../../Applied_NNLS_renal_DWI/rNNLS
 %    disp(PatientNum)
 
     b_values = [0,10,30,50,80,120,200,400,800]; %if original 9 
@@ -57,20 +57,8 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     resultsPeaks = zeros(6,1); %6 was 9 before? unsure why
 
     
-    %% try to fit them with NNLS
-    %[TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
-
-    %% try to fit them with simple NNLS with assumed regularization factor of lanbda = #b/SNR 
-    %lambda = 8;
-    %[TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS(A, SignalInput, lambda);
-
-    %% with L2 norm
-    %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
-
-    %% with forced regularization of curve
-    lambda = 2;
-    [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
-    
+    %% try to git them with NNLS
+    [TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
     
     amplitudes(:) = TempAmplitudes';
     resnorm(:) = TempResnorm';
@@ -97,15 +85,13 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
     %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
 
-    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4,RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4 ] = NNLS_result_mod_ML_fourpeaks(OutputDiffusionSpectrum, ADCBasis);
+    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_result_mod_ML(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
     resultsPeaks(2) = RegionFraction2; %(frac_med - RegionFraction2)./frac_med.*100;
     resultsPeaks(3) = RegionFraction3; %(frac_slow - )./frac_slow.*100;
-    resultsPeaks(4) = RegionFraction4; %(frac_fibro - )./frac_slow.*100;
-    resultsPeaks(5) = GeoMeanRegionADC_1; %(diff_fast - GeoMeanRegionADC_1./1000)./diff_fast.*100;
-    resultsPeaks(6) = GeoMeanRegionADC_2; %(diff_med - GeoMeanRegionADC_2./1000)./diff_med.*100;
-    resultsPeaks(7) = GeoMeanRegionADC_3; %(diff_slow - GeoMeanRegionADC_3./1000)./diff_slow.*100;
-    resultsPeaks(8) = GeoMeanRegionADC_4; %(diff_fibro - GeoMeanRegionADC_3./1000)./diff_slow.*100;
+    resultsPeaks(4) = GeoMeanRegionADC_1; %(diff_fast - GeoMeanRegionADC_1./1000)./diff_fast.*100;
+    resultsPeaks(5) = GeoMeanRegionADC_2; %(diff_med - GeoMeanRegionADC_2./1000)./diff_med.*100;
+    resultsPeaks(6) = GeoMeanRegionADC_3; %(diff_slow - GeoMeanRegionADC_3./1000)./diff_slow.*100;
 
 end
 
@@ -113,19 +99,9 @@ end
 % to be able to get the data for the DWI analysis... hopefully.
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
-
-%% original
-%{
     pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
-%}
-
-%% ICC with Swathi ROIs
-
-    pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
-    pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
-%}
-
+    
     %read data
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');    
     ROITypeTable = DataFrame(startsWith(DataFrame.RoiName, ROItype),:);

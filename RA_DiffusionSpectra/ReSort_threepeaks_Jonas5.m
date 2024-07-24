@@ -1,35 +1,33 @@
 % for the three part peaks, sort into blood, tubule, and tissue
 % ML 2024 May 22nd
 
-%%NOTE,THIS IS FOLLOWING JONAS JASSE THRESHOLDING OF 2 and 50!
 
-%% it takes four spectral peaks and combines into three, and sorts by range of D
+% ML june 26 2024
+% now corrects to be jonas way of sorting by dffusion coefficient but with threhsold of 5!
 
-% 
-function SortedresultsPeaks = ReSort_threepeaks_Jonas(resultsPeaks)
+
+function SortedresultsPeaks = ReSort_threepeaks_Jonas5(resultsPeaks)
 
     %% for note... 
     %disp('------------------------------------------------------------------------- ')
     f_blood = resultsPeaks(1);
     f_tubule = resultsPeaks(2);
     f_tissue = resultsPeaks(3);
-    f_fibro = resultsPeaks(4);
-    D_blood = resultsPeaks(5);
-    D_tubule = resultsPeaks(6);
-    D_tissue = resultsPeaks(7);
-    D_fibro = resultsPeaks(8);
+    D_blood = resultsPeaks(4);
+    D_tubule = resultsPeaks(5);
+    D_tissue = resultsPeaks(6);
     %SortedresultsPeaks = [f_blood, f_tubule, f_tissue, f_fibro, D_blood, D_tubule, D_tissue, D_fibro];
 
-    CompartmentFractions = [f_blood, f_tubule, f_tissue, f_fibro];
-    CompartmentDiffusions = [D_blood, D_tubule, D_tissue, D_fibro];
+    CompartmentFractions = [f_blood, f_tubule, f_tissue];
+    CompartmentDiffusions = [D_blood, D_tubule, D_tissue];
 
-    [bloodf, tubulef, tissuef, fibrof, bloodD, tubuleD, tissueD, fibroD] = deal(0); 
+    [bloodf, tubulef, tissuef, bloodD, tubuleD, tissueD] = deal(0);
     if nnz(CompartmentFractions) > 0
         idxs = find(CompartmentDiffusions); %find which ones are non-zero
         for j=1:length(idxs)
             index = idxs(j); %the jth index that is non zero....
             if ~isnan(CompartmentDiffusions(index)) % if it's not NaN
-                if CompartmentDiffusions(index) < 2 %should combine both tissue and fibrosis peaks here!
+                if CompartmentDiffusions(index) < 5
                     if tissueD ==0 
                         tissueD = CompartmentDiffusions(index);
                         tissuef = CompartmentFractions(index);
@@ -37,7 +35,7 @@ function SortedresultsPeaks = ReSort_threepeaks_Jonas(resultsPeaks)
                         tissueD = (tissueD*tissuef + CompartmentDiffusions(index)*CompartmentFractions(index))./2; % weighted average of diffusion coefficients
                         tissuef = tissuef + CompartmentFractions(index); %sum of the total fraction
                     end
-                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >=2
+                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >=5
                     if tubuleD ==0 
                         tubuleD = CompartmentDiffusions(index);
                         tubulef = CompartmentFractions(index);
@@ -69,11 +67,17 @@ function SortedresultsPeaks = ReSort_threepeaks_Jonas(resultsPeaks)
                     error('what is up with the indexing')
                 end
             end
-            % fibro will always be zero, as anything < 2 is combined into one peak!  
         end
     end
-    SortedresultsPeaks = [bloodf, tubulef, tissuef, fibrof, bloodD, tubuleD, tissueD, fibroD];
+    SortedresultsPeaks = [bloodf, tubulef, tissuef, bloodD, tubuleD, tissueD];
 end
+
+
+
+
+
+
+
 
 
 

@@ -8,7 +8,8 @@
 
 % ML Jan 2024 (woah, 4 months ago? wild)
 
-function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4, RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4] = NNLS_result_mod_ML_fourpeaks( TempAmplitudes, ADCBasis )
+% ML July 2024 changed to include first moment, rather than mean and area. 
+function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4, RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4, firstmoments] = NNLS_result_mod_ML_fourpeaks_firstmoment( TempAmplitudes, ADCBasis )
 
     [locsMax, pksMax]=peakseekTG(TempAmplitudes,1,realmin);
     [locsMin, pksMin]=peakseekTG(-TempAmplitudes-(min(-TempAmplitudes)));
@@ -86,7 +87,22 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
             ADCwidth1 = 1./ADCwidth1(1) - 1./ADCwidth1(end);
             
             GeoMeanRegionADC_1 = (1./ exp( dot( ADCampsRange1, log( ADCBasisRange1 ) ) ./ ( RegionFraction1*TotalArea ) )).*1000;
+            %{
+            test = dot(ADCampsRange1, 1./ADCBasisRange1)./sum( ADCampsRange1 ).*1000
+
+            test2 = 1./ exp(dot(ADCampsRange1, log(ADCBasisRange1))./sum( ADCampsRange1 )).*1000
+
+            test3 = dot(ADCampsRange1, 1./ADCBasisRange1)*1000./sum( ADCampsRange1 ) % as a first for estimation of D
+
+            test4 = dot(ADCampsRange1, 1./ADCBasisRange1)*1000 % as a first moment.
+
+            test5 = RegionFraction1*GeoMeanRegionADC_1 % the normal way
+            TotalArea
+            %}
+
+            firstmoments(1) = dot(ADCampsRange1, 1./ADCBasisRange1)*1000;
     
+
             if length(peaksMax) > 1 %if there's more than just 1 peak)
             %peak 2
                 range2 = (Peak1End(1)+1):Peak2End(1); %ADCBasis >= ADCBasis(Peak1End(1)+1)  &  ADCBasis < ADCBasis(Peak2End(1)+1);
@@ -103,11 +119,15 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
                 end
                 
                 GeoMeanRegionADC_2 = (1./exp( dot( ADCampsRange2, log( ADCBasisRange2 ) ) ./ ( RegionFraction2*TotalArea ) )).*1000;
+
+                firstmoments(2) = dot(ADCampsRange2, 1./ADCBasisRange2)*1000;
             else
                 %disp('no 2nd peak')
                 %set to zero
                 GeoMeanRegionADC_2 = 0;
                 RegionFraction2 = 0;
+
+                firstmoments(2) = 0;
             
             end
             
@@ -120,11 +140,13 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
                     RegionFraction3 = sum( ADCampsRange3 ) / TotalArea;
                     
                     GeoMeanRegionADC_3 = (1./exp( dot( ADCampsRange3, log( ADCBasisRange3 ) ) ./ ( RegionFraction3*TotalArea ) )).*1000;
+                    firstmoments(3) = dot(ADCampsRange3, 1./ADCBasisRange3)*1000;
              else
                  %disp('no 3rd peak')
                 %set to zero
                 GeoMeanRegionADC_3 = 0;
                 RegionFraction3 = 0;
+                firstmoments(3) = 0;
             end
     
             if length(peaksMax) > 3
@@ -136,11 +158,13 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
                     RegionFraction4 = sum( ADCampsRange4 ) / TotalArea;
                     
                     GeoMeanRegionADC_4 = (1./exp( dot( ADCampsRange4, log( ADCBasisRange4 ) ) ./ ( RegionFraction4*TotalArea ) )).*1000;
+                    firstmoments(4) = dot(ADCampsRange4, 1./ADCBasisRange4)*1000;
              else
                  %disp('no 3rd peak')
                 %set to zero
                 GeoMeanRegionADC_4 = 0;
                 RegionFraction4 = 0;
+                firstmoments(4) =0;
             end
     
     
@@ -155,6 +179,7 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
             RegionFraction3 = 0;
             GeoMeanRegionADC_4 = 0;
             RegionFraction4 = 0;
+            firstmoments(1:4) = 0 ;
         end
     end
     %disp([GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4, RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4])

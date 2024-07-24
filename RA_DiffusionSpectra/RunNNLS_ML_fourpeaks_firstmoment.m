@@ -2,7 +2,7 @@
 % can also give pt number and ROI type
 
 % now does it with up to four peaks! (rather than the assumed max of 3)
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_fourpeaks(varargin)
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, firstmoments] = RunNNLS_ML_fourpeaks_firstmoment(varargin)
 
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS
@@ -27,17 +27,32 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
             b_values = varargin{2};
             SignalInput = SignalInput(:)/SignalInput(1);
         end
-    elseif nargin == 3 %have ROI type and new b-values 
-        PatientNum = varargin{1};
-        ROItype = varargin{2};
-        ROItype = [PatientNum '_' ROItype];
-        %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-        SignalInput = ReadPatientDWIData(PatientNum, ROItype);
-        SignalInput = SignalInput(:)/SignalInput(1);
-        b_values = varargin{3}; 
-    else
 
+        % assume lambda = 8
+        lambda = 8;
+    elseif nargin == 3 %have lambda as an input as well
+        if ischar(varargin{2})
+            PatientNum = varargin{1};
+            ROItype = varargin{2};
+            ROItype = [PatientNum '_' ROItype];
+            %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
+            SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+            %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
+        
+            %to match bi-exp, normalizing to b0
+            SignalInput = varargin{1};
+            SignalInput = SignalInput(:)/SignalInput(1);
+
+            lambda = varargin{3};
+        else
+            SignalInput = varargin{1};
+            b_values = varargin{2};
+            SignalInput = SignalInput(:)/SignalInput(1);
+            lambda = varargin{3};
+        end
+    else
         SignalInput = varargin{1};
+        lambda = 8;
     end
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
@@ -68,7 +83,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
 
     %% with forced regularization of curve
-    lambda = 2;
+    
     [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
     
     
@@ -97,7 +112,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     ADCThresh = 1./sqrt([0.180*0.0058 0.0058*0.0015]);
     %[GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,RegionFraction1,RegionFraction2,RegionFraction3 ] = NNLS_resultTG(OutputDiffusionSpectrum, ADCBasis, ADCThresh);
 
-    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4,RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4 ] = NNLS_result_mod_ML_fourpeaks(OutputDiffusionSpectrum, ADCBasis);
+    [GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegionADC_4,RegionFraction1,RegionFraction2,RegionFraction3,RegionFraction4, firstmoments] = NNLS_result_mod_ML_fourpeaks_firstmoment(OutputDiffusionSpectrum, ADCBasis);
     resultsPeaks(1) = RegionFraction1; %(frac_fast - RegionFraction1)./frac_fast.*100;
     resultsPeaks(2) = RegionFraction2; %(frac_med - RegionFraction2)./frac_med.*100;
     resultsPeaks(3) = RegionFraction3; %(frac_slow - )./frac_slow.*100;

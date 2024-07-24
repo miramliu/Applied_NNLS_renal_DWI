@@ -2,7 +2,7 @@
 % can also give pt number and ROI type
 
 % now does it with up to four peaks! (rather than the assumed max of 3)
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_ML_fourpeaks(varargin)
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = RunNNLS_ML_fourpeaks_lambdas(varargin)
 
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS
@@ -58,19 +58,15 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
 
     
     %% try to fit them with NNLS
-    %[TempAmplitudes, TempResnorm, TempResid ] = CVNNLS(A, SignalInput);
+    [TempAmplitudes, TempResnorm, TempResid , Lambda] = CVNNLS_lambdas(A, SignalInput);
 
     %% try to fit them with simple NNLS with assumed regularization factor of lanbda = #b/SNR 
-    %lambda = 8;
+    %lambda = 0.2;
     %[TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS(A, SignalInput, lambda);
+
 
     %% with L2 norm
     %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
-
-    %% with forced regularization of curve
-    lambda = 2;
-    [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
-    
     
     amplitudes(:) = TempAmplitudes';
     resnorm(:) = TempResnorm';

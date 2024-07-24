@@ -12,7 +12,7 @@
 %% also note: change read in runNNLS_ML to 3mo to have it read and save in correct folder. 
 
 %this is now combining slices and poles BEFORE signal input is fit!
-function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
+function RA_DiffusionSpec_Voxelwise_fourpeaks_lambdas(varargin)
     %PatientNum = varargin{1};
     %PatientNum = [varargin{1}];
     %PatientNum = ['RA_02_'  varargin{1}];
@@ -31,7 +31,7 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
         RunAndSave_voxelwise_fourpeaks([PatientNum '_RK'],'C',SignalInput)
         %}
         % now run for Left Kidney
-        
+        %{
         RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
         ab = 12;
@@ -207,13 +207,14 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
     rawpeaknumber = zeros(size(SignalInput,2),1);
     sortedpeaknumber = zeros(size(SignalInput,2),1);
+    Lambdas = zeros(size(SignalInput,2),1);
 
     for voxelj = 1:size(SignalInput,2)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
         currcurve = currcurve(:)/currcurve(1);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
-        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
+        [~, rsq, ~, ~, resultsPeaks, Lambda] = RunNNLS_ML_fourpeaks_lambdas(currcurve); %best results so far regarding Mann-Whitney U & AUC
         
         if rsq>0.7 
             if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
@@ -238,20 +239,6 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
-                
-
-                %{
-                ADCBasisSteps = 300; %(??)
-                ADCBasis = logspace( log10(5), log10(2200), ADCBasisSteps);
-                semilogx((1./ADCBasis)*1000, OutputDiffusionSpectrum)
-                xline(.8)
-                xline(5)
-                xline(50)
-                txt = sprintf('fast f = ' + string(SortedresultsPeaks(1)) + '\n' + 'med f = ' + string(SortedresultsPeaks(2)) + '\n' + 'slow f = ' + string(SortedresultsPeaks(3)));
-                text(10,.04,txt)
-                pause(3)
-                %}
-
                 
                 %{
                 SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks);
@@ -284,7 +271,10 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 sortedfracs = SortedresultsPeaks(1:4);
                 sortedpeaknumber(voxelj,1) = nnz(sortedfracs);
 
+                Lambdas(voxelj,1) = Lambda;
+
                 
+
             end
         else
             ffastvalues(voxelj,1) = NaN;
@@ -308,6 +298,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
             rawpeaknumber(voxelj,1) = NaN;
             sortedpeaknumber(voxelj,1) = NaN;
+            Lambdas(voxelj,1) = NaN;
+
         end
     end
 
@@ -359,6 +351,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                              sum(sortedpeaknumber(:) == 0),  sum(sortedpeaknumber(:) == 1),  sum(sortedpeaknumber(:) == 2),  sum(sortedpeaknumber(:) == 3),  sum(sortedpeaknumber(:) == 4),...
                              size(SignalInput,2)};
 
+    dataarray_lambdas = {mean(Lambdas), median(Lambdas), mode(Lambdas), std(Lambdas)};
+
 %% for RENAL ALLOGRAFT, sara rois
 
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
@@ -377,14 +371,14 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {[PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_regdNNLS_2'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','sortedfourpeaks_lambdavals'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
-        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_regdNNLS_2')
+        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers, dataarray_lambdas];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','sortedfourpeaks_lambdavals')
     end
 %}
 

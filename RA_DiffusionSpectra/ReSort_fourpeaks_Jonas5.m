@@ -5,8 +5,9 @@
 
 %% it takes four spectral peaks and combines into three, and sorts by range of D
 
-% 
-function SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks)
+% ML june 26 2024
+% now corrects to be jonas way of sorting... but with threhsold of 5!
+function SortedresultsPeaks = ReSort_fourpeaks_Jonas5(resultsPeaks)
 
     %% for note... 
     %disp('------------------------------------------------------------------------- ')

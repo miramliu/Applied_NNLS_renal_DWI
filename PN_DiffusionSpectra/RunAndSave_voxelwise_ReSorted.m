@@ -9,11 +9,11 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     ffastvalues_sort = zeros(size(SignalInput,2),1);
     fmedvalues_sort = zeros(size(SignalInput,2),1);
     fslowvalues_sort = zeros(size(SignalInput,2),1);
-    ffibrovalues_sort = zeros(size(SignalInput,2),1);
+    %ffibrovalues_sort = zeros(size(SignalInput,2),1);
     Dfastvalues_sort = zeros(size(SignalInput,2),1);
     Dmedvalues_sort = zeros(size(SignalInput,2),1);
     Dslowvalues_sort = zeros(size(SignalInput,2),1);
-    Dfibrovalues_sort = zeros(size(SignalInput,2),1);
+    %Dfibrovalues_sort = zeros(size(SignalInput,2),1);
     rsqvalues = zeros(size(SignalInput,2),1);
 
     %bvalues = [0,10,30,50,80,120,200,400,800];

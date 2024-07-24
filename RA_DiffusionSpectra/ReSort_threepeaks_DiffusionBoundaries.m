@@ -6,30 +6,28 @@
 %% it takes four spectral peaks and combines into three, and sorts by range of D
 
 % 
-function SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks)
+function SortedresultsPeaks = ReSort_threepeaks_DiffusionBoundaries(resultsPeaks)
 
     %% for note... 
     %disp('------------------------------------------------------------------------- ')
     f_blood = resultsPeaks(1);
     f_tubule = resultsPeaks(2);
     f_tissue = resultsPeaks(3);
-    f_fibro = resultsPeaks(4);
-    D_blood = resultsPeaks(5);
-    D_tubule = resultsPeaks(6);
-    D_tissue = resultsPeaks(7);
-    D_fibro = resultsPeaks(8);
+    D_blood = resultsPeaks(4);
+    D_tubule = resultsPeaks(5);
+    D_tissue = resultsPeaks(6);
     %SortedresultsPeaks = [f_blood, f_tubule, f_tissue, f_fibro, D_blood, D_tubule, D_tissue, D_fibro];
 
-    CompartmentFractions = [f_blood, f_tubule, f_tissue, f_fibro];
-    CompartmentDiffusions = [D_blood, D_tubule, D_tissue, D_fibro];
+    CompartmentFractions = [f_blood, f_tubule, f_tissue];
+    CompartmentDiffusions = [D_blood, D_tubule, D_tissue];
 
-    [bloodf, tubulef, tissuef, fibrof, bloodD, tubuleD, tissueD, fibroD] = deal(0); 
+    [bloodf, tubulef, tissuef, bloodD, tubuleD, tissueD] = deal(0); 
     if nnz(CompartmentFractions) > 0
         idxs = find(CompartmentDiffusions); %find which ones are non-zero
         for j=1:length(idxs)
             index = idxs(j); %the jth index that is non zero....
             if ~isnan(CompartmentDiffusions(index)) % if it's not NaN
-                if CompartmentDiffusions(index) <= 2 && CompartmentDiffusions(index) >.8 %%tissue only
+                if CompartmentDiffusions(index) < 5 %should combine both tissue and fibrosis peaks here!
                     if tissueD ==0 
                         tissueD = CompartmentDiffusions(index);
                         tissuef = CompartmentFractions(index);
@@ -37,7 +35,7 @@ function SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks)
                         tissueD = (tissueD*tissuef + CompartmentDiffusions(index)*CompartmentFractions(index))./2; % weighted average of diffusion coefficients
                         tissuef = tissuef + CompartmentFractions(index); %sum of the total fraction
                     end
-                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >2
+                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >=5
                     if tubuleD ==0 
                         tubuleD = CompartmentDiffusions(index);
                         tubulef = CompartmentFractions(index);
@@ -52,15 +50,6 @@ function SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks)
                     else %if more than one compartment falls within this boundary
                         bloodD = (bloodD*bloodf + CompartmentDiffusions(index)*CompartmentFractions(index))./2; % weighted average of diffusion coefficients
                         bloodf = bloodf + CompartmentFractions(index); %sum of the total fraction
-                    end
-
-                elseif CompartmentDiffusions(index) <=0.8
-                    if fibroD ==0 
-                        fibroD = CompartmentDiffusions(index);
-                        fibrof = CompartmentFractions(index);
-                    else %if more than one compartment falls within this boundary
-                        fibroD = (fibroD*fibrof + CompartmentDiffusions(index)*CompartmentFractions(index))./2; % weighted average of diffusion coefficients
-                        fibrof = fibrof + CompartmentFractions(index); %sum of the total fraction
                     end
                 else
                     disp(CompartmentDiffusions(index))
@@ -77,10 +66,11 @@ function SortedresultsPeaks = ReSort_fourpeaks_Jonas(resultsPeaks)
                     disp(index)
                     error('what is up with the indexing')
                 end
-            end 
+            end
+            % fibro will always be zero, as anything < 2 is combined into one peak!  
         end
     end
-    SortedresultsPeaks = [bloodf, tubulef, tissuef, fibrof, bloodD, tubuleD, tissueD, fibroD];
+    SortedresultsPeaks = [bloodf, tubulef, tissuef, bloodD, tubuleD, tissueD];
 end
 
 

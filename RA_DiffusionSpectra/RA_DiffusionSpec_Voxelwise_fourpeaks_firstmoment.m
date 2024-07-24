@@ -12,7 +12,7 @@
 %% also note: change read in runNNLS_ML to 3mo to have it read and save in correct folder. 
 
 %this is now combining slices and poles BEFORE signal input is fit!
-function RA_DiffusionSpec_Voxelwise_fourpeaks(varargin)
+function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
     %PatientNum = varargin{1};
     %PatientNum = [varargin{1}];
     %PatientNum = ['RA_02_'  varargin{1}];
@@ -208,13 +208,20 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     rawpeaknumber = zeros(size(SignalInput,2),1);
     sortedpeaknumber = zeros(size(SignalInput,2),1);
 
+    fastfirstmoments_sort = zeros(size(SignalInput,2),1);
+    medfirstmoments_sort = zeros(size(SignalInput,2),1);
+    slowfirstmoments_sort = zeros(size(SignalInput,2),1);
+    fibrofirstmoments_sort = zeros(size(SignalInput,2),1);
+
     for voxelj = 1:size(SignalInput,2)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
         currcurve = currcurve(:)/currcurve(1);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
-        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
-        
+        %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
+
+        [~, rsq, ~, ~, resultsPeaks, firstmoments] = RunNNLS_ML_fourpeaks_firstmoment(currcurve); %best results so far regarding Mann-Whitney U & AUC
+
         if rsq>0.7 
             if resultsPeaks(1)<1000 %it's set to 10000 if no peaks found, see line 32 of NNLS_result_mod
                 ffastvalues(voxelj,1) = resultsPeaks(1);
@@ -229,7 +236,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
                 % now also try to sort them... 
                 
-                SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks);
+                [SortedresultsPeaks, Sortedmoments] = ReSort_fourpeaks_firstmoments(resultsPeaks, firstmoments);
                 ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
                 fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
                 fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
@@ -238,7 +245,12 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
                 Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
                 Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
-                
+
+                fastfirstmoments_sort(voxelj,1) = Sortedmoments(1);
+                medfirstmoments_sort(voxelj,1) = Sortedmoments(2);
+                slowfirstmoments_sort(voxelj,1) = Sortedmoments(3);
+                fibrofirstmoments_sort(voxelj,1) = Sortedmoments(4);
+
 
                 %{
                 ADCBasisSteps = 300; %(??)
@@ -308,6 +320,11 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
             rawpeaknumber(voxelj,1) = NaN;
             sortedpeaknumber(voxelj,1) = NaN;
+
+            fastfirstmoments_sort(voxelj,1) = NaN;
+            medfirstmoments_sort(voxelj,1) = NaN;
+            slowfirstmoments_sort(voxelj,1) = NaN;
+            fibrofirstmoments_sort(voxelj,1) = NaN;    
         end
     end
 
@@ -359,6 +376,11 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                              sum(sortedpeaknumber(:) == 0),  sum(sortedpeaknumber(:) == 1),  sum(sortedpeaknumber(:) == 2),  sum(sortedpeaknumber(:) == 3),  sum(sortedpeaknumber(:) == 4),...
                              size(SignalInput,2)};
 
+    dataarray_firstmoments = {mean(fastfirstmoments_sort,'omitnan'), median(fastfirstmoments_sort,'omitnan'), std(fastfirstmoments_sort,'omitnan'),...
+                               mean(medfirstmoments_sort,'omitnan'), median(medfirstmoments_sort,'omitnan'), std(medfirstmoments_sort,'omitnan'),...
+                               mean(slowfirstmoments_sort,'omitnan'), median(slowfirstmoments_sort,'omitnan'), std(slowfirstmoments_sort,'omitnan'),...
+                               mean(fibrofirstmoments_sort,'omitnan'), median(fibrofirstmoments_sort,'omitnan'), std(fibrofirstmoments_sort,'omitnan')};
+
 %% for RENAL ALLOGRAFT, sara rois
 
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
@@ -377,14 +399,14 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {[PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_regdNNLS_2'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_regdNNLS_8_fd'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
-        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_regdNNLS_2')
+        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers, dataarray_firstmoments];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_regdNNLS_8_fd')
     end
 %}
 
