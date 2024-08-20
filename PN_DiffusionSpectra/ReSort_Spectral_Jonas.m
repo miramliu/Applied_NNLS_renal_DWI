@@ -3,6 +3,7 @@
 
 %%NOTE,THIS IS FOLLOWING JONAS JASSE THRESHOLDING OF 2 and 50!
 
+%% also added JJ threshold of 5 and 50 matching the spectral paper. 
 
 function SortedresultsPeaks = ReSort_Spectral_Jonas(resultsPeaks)
 
@@ -25,7 +26,7 @@ function SortedresultsPeaks = ReSort_Spectral_Jonas(resultsPeaks)
         for j=1:length(idxs)
             index = idxs(j); %the jth index that is non zero....
             if ~isnan(CompartmentDiffusions(index)) % if it's not NaN
-                if CompartmentDiffusions(index) < 2
+                if CompartmentDiffusions(index) < 5%2
                     if tissueD ==0 
                         tissueD = CompartmentDiffusions(index);
                         tissuef = CompartmentFractions(index);
@@ -33,7 +34,7 @@ function SortedresultsPeaks = ReSort_Spectral_Jonas(resultsPeaks)
                         tissueD = (tissueD*tissuef + CompartmentDiffusions(index)*CompartmentFractions(index))./2; % weighted average of diffusion coefficients
                         tissuef = tissuef + CompartmentFractions(index); %sum of the total fraction
                     end
-                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >=2
+                elseif CompartmentDiffusions(index) < 50 && CompartmentDiffusions(index) >=5%2
                     if tubuleD ==0 
                         tubuleD = CompartmentDiffusions(index);
                         tubulef = CompartmentFractions(index);

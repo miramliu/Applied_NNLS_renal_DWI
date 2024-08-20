@@ -2,7 +2,7 @@
 % can also give pt number and ROI type
 
 % now does it with up to four peaks! (rather than the assumed max of 3)
-function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = RunNNLS_ML_fourpeaks_lambdas(varargin)
+function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = RunNNLS_ML_fourpeaks_lambda(varargin)
 
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
     %addpath ../../Applied_NNLS_renal_DWI/rNNLS
@@ -19,22 +19,18 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = 
             SignalInput = ReadPatientDWIData(PatientNum, ROItype);
             %SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype);
         
-            %to match bi-exp, normalizing to b0
-            SignalInput = varargin{1};
             SignalInput = SignalInput(:)/SignalInput(1);
         else
             SignalInput = varargin{1};
             b_values = varargin{2};
             SignalInput = SignalInput(:)/SignalInput(1);
         end
-    elseif nargin == 3 %have ROI type and new b-values 
-        PatientNum = varargin{1};
-        ROItype = varargin{2};
-        ROItype = [PatientNum '_' ROItype];
-        %% CHANGE HERE FOR BASELINE, 3M0 OR 12MO
-        SignalInput = ReadPatientDWIData(PatientNum, ROItype);
+        lambda = 8; %the assumed
+    elseif nargin == 3 %input lambda
+        SignalInput = varargin{1};
         SignalInput = SignalInput(:)/SignalInput(1);
-        b_values = varargin{3}; 
+        b_values = varargin{2}; 
+        lambda = varargin{3};
     else
 
         SignalInput = varargin{1};
@@ -58,8 +54,9 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = 
 
     
     %% try to fit them with NNLS
-    [TempAmplitudes, TempResnorm, TempResid , Lambda] = CVNNLS_lambdas(A, SignalInput);
+    [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
 
+    
     %% try to fit them with simple NNLS with assumed regularization factor of lanbda = #b/SNR 
     %lambda = 0.2;
     %[TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS(A, SignalInput, lambda);

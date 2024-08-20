@@ -134,13 +134,13 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
 
     
 %% for original baseline
-%{
+
     pathtodata = '/Users/miraliu/Desktop/Data/PN/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
     %}
     
 %% for interobserver
-
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/PN/Arthi Test ROIs/';
     pathtoCSV = [pathtodata PatientNum '_Arthi_IVIM.csv'];
     %}
@@ -149,7 +149,10 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     %{
     disp('for test-retest') %and then also change lines 70 - 103 in RunAndSave_voxelwise_ReSorted, and line 94 there. 
     pathtodata = '/Users/miraliu/Desktop/Data/PN/PartialNephrectomy_TestRetest/';
-    pathtoCSV = [pathtodata '/P004_IVIM_Scan1_retest.csv']
+    %pathtoCSV = [pathtodata '/P004_IVIM_Scan1_test.csv']
+    %pathtoCSV = [pathtodata '/P004_IVIM_Scan1_retest.csv']
+    %pathtoCSV = [pathtodata '/P011_IVIM_Scan1_retest.csv']
+    pathtoCSV = [pathtodata '/P011_IVIM_Scan1_test.csv']
     %}
 
 

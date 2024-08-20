@@ -98,10 +98,15 @@ function [ GeoMeanRegionADC_1,GeoMeanRegionADC_2,GeoMeanRegionADC_3,GeoMeanRegio
 
             test5 = RegionFraction1*GeoMeanRegionADC_1 % the normal way
             TotalArea
-            %}
+            
 
-            firstmoments(1) = dot(ADCampsRange1, 1./ADCBasisRange1)*1000;
-    
+            test7 = (1./ dot( ADCampsRange1,  ADCBasisRange1 ) )*1000 
+            test6 = (1./ exp( dot( ADCampsRange1, log( ADCBasisRange1 ) )))*1000 
+            test = GeoMeanRegionADC_1
+            test5 = RegionFraction1*GeoMeanRegionADC_1 % the normal way
+            test8 = dot(ADCampsRange1, 1./ADCBasisRange1)*1000./sum(ADCampsRange1)
+            firstmoments(1) = dot(ADCampsRange1, 1./ADCBasisRange1)*1000./TotalArea
+            %}
 
             if length(peaksMax) > 1 %if there's more than just 1 peak)
             %peak 2

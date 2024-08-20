@@ -1,5 +1,5 @@
 %% saving and running on signal input
-function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
+function RunAndSave_voxelwise_ReSortedFourpeak(PatientNum, ROItype,SignalInput)
 
     %% saving and running on signal input
     disp([PatientNum '_' ROItype])
@@ -32,7 +32,7 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
         %% faster
         b_values = [0,10,30,50,80,120,200,400,800]; %if original 9 
         lambda = 0.1;
-        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_lambda(currcurve, b_values, lambda);
+        [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks_lambda(currcurve, b_values, lambda);
 
     
         if rsq>0.7
@@ -41,20 +41,24 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
                 % now  try to sort them... 
                 %SortedresultsPeaks = ReSort_SpectralPN(resultsPeaks);
 
-                % changed may 2024 to jonas sorting to test! 
-                SortedresultsPeaks = ReSort_Spectral_Jonas(resultsPeaks);
+                % changed July 2024 to try fourpeak sorting
+                % note: ignoring the fourth peak! 
+
+                SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks);
 
                 ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
                 fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
                 fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
-                Dfastvalues_sort(voxelj,1) = SortedresultsPeaks(4);
-                Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(5);
-                Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(6);
+                %ffibrovalues_sort(voxelj,1) = SortedresultsPeaks(4);
+                Dfastvalues_sort(voxelj,1) = SortedresultsPeaks(5);
+                Dmedvalues_sort(voxelj,1) = SortedresultsPeaks(6);
+                Dslowvalues_sort(voxelj,1) = SortedresultsPeaks(7);
+                %Dfibrovalues_sort(voxelj,1) = SortedresultsPeaks(8);
                 rsqvalues(voxelj,1) = rsq;
 
 
                 % number of peaks
-                rawfracs = resultsPeaks(1:3);
+                rawfracs = resultsPeaks(1:4);
                 rawpeaknumber(voxelj,1) = nnz(rawfracs);
                 sortedfracs = SortedresultsPeaks(1:3);
                 sortedpeaknumber(voxelj,1) = nnz(sortedfracs);
@@ -102,15 +106,15 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     ExcelFileName=[pathtodata, '/','PN_IVIM_DiffusionSpectra.xlsx']; % All results will save in excel file
 
     Identifying_Info = {['PN_' PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','ReSort_Voxelwise_JONAS5_lambda1'); %read only identifying info that already exists
-    %% Resort voxelwise take 2 is with boundary of 50, Resort voxelwise is with boundary of 10! JONAS 5 is with the boundary of 5 and 50 
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Voxelwise_fourpeak_lambdapt1'); %read only identifying info that already exists
+    %% Resort voxelwise take 2 is with boundary of 50, Resort voxelwise is with boundary of 10!
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort,dataarray_peaknumbers];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','ReSort_Voxelwise_JONAS5_lambda1')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_fourpeak_lambdapt1')
     end
 
     %}
@@ -120,15 +124,15 @@ function RunAndSave_voxelwise_ReSorted(PatientNum, ROItype,SignalInput)
     pathtodata = '/Users/miraliu/Desktop/Data/PN/PartialNephrectomy_TestRetest';
     ExcelFileName=[pathtodata, '/','PN_TestRetesting.xlsx']; % All results will save in excel file
 
-    Identifying_Info = {['PN_' PatientNum], [PatientNum, '_test'], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:C','Sheet','Voxelwise_spectral_lambda1'); %read only identifying info that already exists
+    Identifying_Info = {['PN_' PatientNum], [PatientNum, '_retest'], [PatientNum '_' ROItype]};
+    Existing_Data = readcell(ExcelFileName,'Range','A:C','Sheet','Voxelwise Sorted Spectral'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         Export_Cell = [Identifying_Info,dataarray_sort];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise_spectral_lambda1')
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Voxelwise Sorted Spectral')
     end
     %}
     %% for interobserver

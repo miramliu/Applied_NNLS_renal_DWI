@@ -14,7 +14,7 @@
 % use regularization parameter lambda as the 3rd input argument, which should be on the order of number of b=values/SNR 
 % Now outputs unregularized NNLS results as well, 
 % Mira Liu 2024.07.22 Editted: now does regularize the edges of the spectrum no longer assuming there is no diffusion
-% outside the given range. 
+% outside the given range. Mainly for peak fitting ease... need to examine more statistical effects with simulation. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Description:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -11,7 +11,7 @@ function RunAndSave_AnisotropySimulation_9bvals_firstmoments(ImportSheetName)
     %pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves_20240624.xlsx']; %this one is??? two peak??
 
     %% this one is three peakMultiExpSimulatedCurves_20240611
-    pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves_20240611.xlsx']; %this one is??? two peak??
+    pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves_20240611.xlsx']; %this one is??? three peak??
 
 
     if contains(ImportSheetName, 'sorted')
@@ -56,7 +56,7 @@ function Run_SpectralFit_firstmoments(RunNum, SignalInput, ExportSheetName)
         currcurve = squeeze(double(SignalInput(:,voxelj))); %get signal from particular voxel for all images along z axis
         currcurve = currcurve(:)/currcurve(1);
 
-        lambda=8;
+        lambda=0.1;
         [~, rsq, ~, ~, resultsPeaks, firstmoments] = RunNNLS_ML_fourpeaks_firstmoment(currcurve,b_values, lambda); 
 
         [SortedresultsPeaks, Sortedmoments] = ReSort_fourpeaks_firstmoments(resultsPeaks, firstmoments);
@@ -87,7 +87,7 @@ function Run_SpectralFit_firstmoments(RunNum, SignalInput, ExportSheetName)
     pathtodata = '/Users/miraliu/Desktop/PostDocCode/Multiexp_Simulations_python/';
     %ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits.xlsx']; % All results will save in excel file
     %ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240529.xlsx']; % All results will save in excel file
-    ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240722_3pk_9bvals_lambda8.xlsx']; % All results will save in excel file
+    ExcelFileName=[pathtodata, '/','SimulatedDiffusionSpectra_Fits_20240722_3pk_9bvals_lambdapt1.xlsx']; % All results will save in excel file
 
     % i hate matlab. so ineffficient my god. 
     why = table2array(RunNum);
