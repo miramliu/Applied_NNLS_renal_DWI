@@ -25,7 +25,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, Lambda] = 
             b_values = varargin{2};
             SignalInput = SignalInput(:)/SignalInput(1);
         end
-        lambda = 8; %the assumed
+        lambda = 0.1; %the assumed
     elseif nargin == 3 %input lambda
         SignalInput = varargin{1};
         SignalInput = SignalInput(:)/SignalInput(1);

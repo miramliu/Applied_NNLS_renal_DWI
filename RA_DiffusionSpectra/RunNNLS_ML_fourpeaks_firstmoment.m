@@ -29,7 +29,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, firstmomen
         end
 
         % assume lambda = 8
-        lambda = 8;
+        lambda = 1;
     elseif nargin == 3 %have lambda as an input as well
         if ischar(varargin{2})
             PatientNum = varargin{1};
@@ -83,7 +83,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, firstmomen
     %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
 
     %% with forced regularization of curve
-    
+    lambda = 0.1;
     [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
     
     
@@ -124,7 +124,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks, firstmomen
 
 end
 
-
+%{
 % to be able to get the data for the DWI analysis... hopefully.
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
@@ -136,7 +136,7 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 %}
 
 %% ICC with Swathi ROIs
-
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
 %}
@@ -188,3 +188,4 @@ function SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype)
     SignalInput = SignalInput./SignalInput(1); %normalize to b0
 
 end
+%}

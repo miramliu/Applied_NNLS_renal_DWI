@@ -117,7 +117,8 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
 
 %% for RENAL ALLOGRAFT, sara rois
 
-    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
+    %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_set2/';
     pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
 %}
 
@@ -237,6 +238,7 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 % now also try to sort them... 
                 
                 [SortedresultsPeaks, Sortedmoments] = ReSort_fourpeaks_firstmoments(resultsPeaks, firstmoments);
+                
                 ffastvalues_sort(voxelj,1) = SortedresultsPeaks(1);
                 fmedvalues_sort(voxelj,1) = SortedresultsPeaks(2);
                 fslowvalues_sort(voxelj,1) = SortedresultsPeaks(3);
@@ -383,8 +385,9 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
 %% for RENAL ALLOGRAFT, sara rois
 
-    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
-    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_CORRECTED.xlsx']; % All results will save in excel file
+    %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_set2';
+    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_SET2.xlsx']; % All results will save in excel file
 %}
 
 %% for Swathi ICC ROIs
@@ -399,14 +402,15 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {[PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_regdNNLS_8_fd'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_simpNNLS_pt1'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
-        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers, dataarray_firstmoments];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_regdNNLS_8_fd')
+        %Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers, dataarray_firstmoments];
+        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_simpNNLS_pt1')
     end
 %}
 

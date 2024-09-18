@@ -5,7 +5,7 @@
 
 % important changes from ReSort_fourpeaks_orig: 'expected' diffusion is 1.8 now as opposed to 1.5, 
 % and threshold for blood is now 50 as opposed to 10. and now peak size is considered. 
-% assumes fibrosis < .8, tissue is > .8, < 5, tubule is > 2, < 50, blood is > 50 
+% assumes fibrosis < .8, tissue is > .8, < 5, tubule is > 5, < 50, blood is > 50 
 function [SortedresultsPeaks, Sortedmoments] = ReSort_fourpeaks_firstmoments(resultsPeaks, firstmoments)
 
     
@@ -551,16 +551,23 @@ function [SortedresultsPeaks, Sortedmoments] = ReSort_fourpeaks_firstmoments(res
                     end
                 end
             end
-        else %  it's 4 peaks and it's just it's in descending order... 
-            Sortedmoments = [firstmoments(1), firstmoments(2), firstmoments(3), firstmoments(4)];
-            SortedresultsPeaks = [f_blood, f_tubule, f_tissue, f_fibro, D_blood, D_tubule, D_tissue, D_fibro];
+        else %  it's 4 peaks and it's just it's in descending order...  CHANGED NOW IT'S SORTING JUST BY DIFFUSION COEFFICIENT
+            %Sortedmoments = [firstmoments(1), firstmoments(2), firstmoments(3), firstmoments(4)];
+            %SortedresultsPeaks = [f_blood, f_tubule, f_tissue, f_fibro, D_blood, D_tubule, D_tissue, D_fibro];
+            SortedresultsPeaks = ReSort_threepeaks_DiffusionBoundaries(resultsPeaks);
+            SortedresultsPeaks = [SortedresultsPeaks(1), SortedresultsPeaks(2), SortedresultsPeaks(3), 0, SortedresultsPeaks(4), SortedresultsPeaks(5), SortedresultsPeaks(6), 0];
+            %disp('check 4peaks')
+            Sortedmoments = [firstmoments(1), firstmoments(2), firstmoments(3), firstmoments(4)]; %not sorted, but not using this anyway
+        
         end
     else %if only one peak... then that one peak has got to be the diffusion one... 
         idxs = find(resultsPeaks); %find which one is non-zero
         SortedresultsPeaks = [0,0,resultsPeaks(idxs(1)),0,0,0,resultsPeaks(idxs(2)),0] ;
 
+        
         idxs = find(firstmoments);
-        Sortedmoments = [0, 0, firstmoments(idxs), 0];
+        Sortedmoments = [0, 0, max([firstmoments(idxs), 0]), 0]; %max is for if there is no nonzeros
+        %disp('check')
 
     end
 
