@@ -7,10 +7,13 @@ function RunAndSave_AnisotropySimulation_9bvals_lambdas(NumberofCompartments, Ex
     %pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves_20240611.xlsx']; % All results will save in excel file
     %pathtoCSV=[pathtodata, '/','MultiExpSimulatedCurves_20240624.xlsx']; % 
 
-    if strcmp(NumberofCompartments, 'two peak')
-        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_20240624.xlsx'];
-    elseif strcmp(NumberofCompartments, 'three peak')
-        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_20240611.xlsx'];
+    if strcmp(NumberofCompartments, 'three peak')
+        %pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_20240624.xlsx']; for all Gaussian, first submission to MRM september 2024
+        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11142024.xlsx']; %for anomalous diffusion, second submission to MRM
+    elseif strcmp(NumberofCompartments, 'two peak')
+        %pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_20240611.xlsx']; % for all Gaussian, first submission to MRM September 2024
+        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11182024.xlsx']; %for anomalous diffusion, second submission to MRM
+
     else
         error('please say it is either two peak or three peak')
     end
@@ -32,11 +35,16 @@ function RunAndSave_AnisotropySimulation_9bvals_lambdas(NumberofCompartments, Ex
 %% fit and export data
     for j = 1:size(DataFrame,1)
         RunNum = DataFrame(j,'Run Number');
+        %% for first submission, which has 11 b-values
+        %{
         DataCurve_j = DataFrame(j,["b0","b10","b30","b50","b80","b120","b200","b400","b800","b1100","b1380"]);
-
         %% now cut the data, remove the last two
         DataCurve_j=DataCurve_j(:,1:end-2);
-        
+        %}
+
+        %% for second submission, which only used 9 b-values
+        DataCurve_j = DataFrame(j,["b0","b10","b30","b50","b80","b120","b200","b400","b800"]);
+
         SignalInput = zeros(9,1);
         SignalInput = SignalInput + table2array(DataCurve_j)';
 

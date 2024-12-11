@@ -1,6 +1,8 @@
 
 
 %% Run all renal allograft IVIM cases
+
+%% SET 1
 %{
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P001')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P002')
@@ -62,10 +64,29 @@ RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P057')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P058')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P059')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P060')
+
+
+
+%% healthy volunteers (thank you!!)
+%must change 
+
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V001') %change line 16/17 to RA_01
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V002') %change line 16/17 to RA_01
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V003') %change line 16/17 to RA_01
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V004') %change line 16/17 to RA_01
+%RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V005') %change line 16/17 to RA_01
+
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V001',2) %change line 16/17 to RA_02
+
+
+
 %}
 
 
-%{
+
+
+%% SET 2
+
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P061')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P062')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P063')
@@ -82,31 +103,26 @@ RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P074')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P075')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P076')
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P077')
+
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P079')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P080')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P081')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P082')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P083')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P084')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P085')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P086')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P087')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P088')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P089')
+RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P090')
 %}
-
-
 
 
 
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
 %RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment, line 17 or 18
-
-%{
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P006',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P007',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P009',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P008',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P010',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P011',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P012',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P014',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P015',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P018',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P019',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P020',2)
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P021',2)
-%}
 
 
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P003',2)
@@ -146,19 +162,5 @@ RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P038',2)
 
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P040',2)
 RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('P041',2)
-
-
-%% healthy volunteers (thank you!!)
-%must change 
-%{
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V001') %change line 16/17 to RA_01
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V002') %change line 16/17 to RA_01
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V003') %change line 16/17 to RA_01
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V004') %change line 16/17 to RA_01
-%RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V005') %change line 16/17 to RA_01
-
-RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment('V001',2) %change line 16/17 to RA_02
-
-
-
 %}
+

@@ -116,7 +116,7 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     end
 
 %% for RENAL ALLOGRAFT, sara rois
-
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
     pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
 %}
@@ -124,7 +124,7 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
 
 
 %% for Swathi ICC ROIs
-%{
+
     pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs/';
     pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv'];
 %}  
@@ -354,13 +354,13 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     dataarray_lambdas = {mean(Lambdas), median(Lambdas), mode(Lambdas), std(Lambdas)};
 
 %% for RENAL ALLOGRAFT, sara rois
-
+%{
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_CORRECTED.xlsx']; % All results will save in excel file
 %}
 
 %% for Swathi ICC ROIs
-%{
+
     pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs';
     ExcelFileName=[pathtodata, '/','RA_Swathi_DiffusionSpectra_IVIM.xlsx']; % All results will save in excel file
 %}

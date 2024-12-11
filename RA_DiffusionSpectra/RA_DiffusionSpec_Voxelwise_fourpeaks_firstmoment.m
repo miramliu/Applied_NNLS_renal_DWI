@@ -25,11 +25,18 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
         end
         
         RoiTypes = {'RK_LP_C','RK_LP_M','RK_MP_C','RK_MP_M','RK_UP_C','RK_UP_M'};
+        
         cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
         ab = 12;
         SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
         RunAndSave_voxelwise_fourpeaks([PatientNum '_RK'],'C',SignalInput)
         %}
+        %% for medulla
+        cortreg = regexp(RoiTypes, '^.*.M$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
+        ab = 12;
+        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
+        RunAndSave_voxelwise_fourpeaks([PatientNum '_RK'],'M',SignalInput)
+        
         % now run for Left Kidney
         
         RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
@@ -37,6 +44,13 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
         ab = 12;
         SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
         RunAndSave_voxelwise_fourpeaks([PatientNum '_LK'],'C',SignalInput)
+        %}
+        %% for medulla
+        RoiTypes = {'LK_LP_C','LK_LP_M','LK_MP_C','LK_MP_M','LK_UP_C','LK_UP_M'};
+        cortreg = regexp(RoiTypes, '^.*.M$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
+        ab = 12;
+        SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab);
+        RunAndSave_voxelwise_fourpeaks([PatientNum '_LK'],'M',SignalInput)
         %}
     else %is allograft study, so only one allograft
         if nargin == 1 || nargin == 2 && varargin{2} <10 
@@ -51,7 +65,7 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
             end
 
             RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
-            %medulreg = regexp(RoiTypes, '^.*.M$','match'); medulreg = medulreg(~cellfun('isempty',medulreg));
+            medulreg = regexp(RoiTypes, '^.*.M$','match'); medulreg = medulreg(~cellfun('isempty',medulreg));
             cortreg = regexp(RoiTypes, '^.*.C$','match'); cortreg = cortreg(~cellfun('isempty',cortreg)); 
             
             ab = 12;
@@ -61,6 +75,9 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
             %fit that and save it
             RunAndSave_voxelwise_fourpeaks(PatientNum,'C',SignalInput)
 
+            SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
+            RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
+%}
         elseif nargin == 1 || nargin == 2 && varargin{2} > 10
            
             RoiTypes = {'LP_C','LP_M','MP_C','MP_M','UP_C','UP_M'};
@@ -72,18 +89,23 @@ function RA_DiffusionSpec_Voxelwise_fourpeaks_firstmoment(varargin)
             else
                 ab = 12; %expect only 1,2
             end
-    
+            PatientNum = ['RA_01_'  varargin{1}];
             % not doing cortical for RA IFTA 
             % get average medullar ROI
-            %{
+            
             SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
             %fit that and save it
             RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
             %}
+            
             % get average cortical ROI
             SignalInput = ReadPatientDWIData_voxelwise(PatientNum, cortreg, ab); 
             %fit that and save it
             RunAndSave_voxelwise_fourpeaks(PatientNum,'C',SignalInput)
+%{
+            SignalInput = ReadPatientDWIData_voxelwise(PatientNum, medulreg, ab); 
+            RunAndSave_voxelwise_fourpeaks(PatientNum,'M',SignalInput)
+%}
         end
     end  
        
@@ -116,18 +138,18 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     end
 
 %% for RENAL ALLOGRAFT, sara rois
-
+%{
     %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM/';
     pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_set2/';
-    pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
+    pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv']
 %}
 
 
 
 %% for Swathi ICC ROIs
-%{
+
     pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs/';
-    pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv'];
+    pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv']
 %}  
 
         %% for each type, this is Poles
@@ -208,6 +230,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
     rawpeaknumber = zeros(size(SignalInput,2),1);
     sortedpeaknumber = zeros(size(SignalInput,2),1);
+
+    compartmentnumbers=zeros(size(SignalInput,2),4); %four potential peaks/compartments per voxel. sorting and seeing which compartment is nonzeros
 
     fastfirstmoments_sort = zeros(size(SignalInput,2),1);
     medfirstmoments_sort = zeros(size(SignalInput,2),1);
@@ -297,6 +321,9 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                 rawpeaknumber(voxelj,1) = nnz(rawfracs);
                 sortedfracs = SortedresultsPeaks(1:4);
                 sortedpeaknumber(voxelj,1) = nnz(sortedfracs);
+                compartment_nonzeros = find(sortedfracs);
+                compartmentnumbers(voxelj,compartment_nonzeros) = compartmentnumbers(voxelj,compartment_nonzeros)+1;
+
 
                 
             end
@@ -383,11 +410,16 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
                                mean(slowfirstmoments_sort,'omitnan'), median(slowfirstmoments_sort,'omitnan'), std(slowfirstmoments_sort,'omitnan'),...
                                mean(fibrofirstmoments_sort,'omitnan'), median(fibrofirstmoments_sort,'omitnan'), std(fibrofirstmoments_sort,'omitnan')};
 
+    total_compartmentnumber = sum(compartmentnumbers);
+    dataarray_compartmentnumbers = {total_compartmentnumber(1), total_compartmentnumber(2), total_compartmentnumber(3), total_compartmentnumber(4)};
+
 %% for RENAL ALLOGRAFT, sara rois
 
-    %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
-    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_set2';
-    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_SET2.xlsx']; % All results will save in excel file
+    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
+    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_ALL.xlsx']; % All results will save in excel file
+
+    %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_set2';
+    %ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_SET2.xlsx']; % All results will save in excel file
 %}
 
 %% for Swathi ICC ROIs
@@ -402,15 +434,15 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %Patient ID	ROI Type	mean	stdev	median	skew	kurtosis	size n
 
     Identifying_Info = {[PatientNum], [PatientNum '_' ROItype]};
-    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Sortedfourpeaks_simpNNLS_pt1'); %read only identifying info that already exists
+    Existing_Data = readcell(ExcelFileName,'Range','A:B','Sheet','Swathi'); %read only identifying info that already exists
     MatchFunc = @(A,B)cellfun(@isequal,A,B);
     idx = cellfun(@(Existing_Data)all(MatchFunc(Identifying_Info,Existing_Data)),num2cell(Existing_Data,2));
 
     if sum(idx)==0
         disp('saving data in excel')
         %Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers, dataarray_firstmoments];
-        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers];
-        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Sortedfourpeaks_simpNNLS_pt1')
+        Export_Cell = [Identifying_Info,dataarray_sort, dataarray_peaknumbers,dataarray_compartmentnumbers];
+        writecell(Export_Cell,ExcelFileName,'WriteMode','append','Sheet','Swathi')
     end
 %}
 
