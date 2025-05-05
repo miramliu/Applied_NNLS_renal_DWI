@@ -1,39 +1,29 @@
 %% saving and running on signal input
-function RunAndSave_AnomalousAnisotropySimulation_9bvals_lambdas(NumberofCompartments, ExportfileName, ExportSheetName_base, lambda)
+function RunAndSave_AnomalousAnisotropySimulation_9bvals_peaknumber(NumberofCompartments, ExportfileName, ExportSheetName_base, lambda)
 
 %% read in data
     pathtodata = '/Users/miraliu/Desktop/PostDocCode/Multiexp_Simulations_python/';
 
-    %{
     if strcmp(NumberofCompartments, 'three peak')
-        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11142024.xlsx']; %for anomalous diffusion, second submission to MRM
+        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11142024.xlsx']; %for anomalous diffusion, second submission to MR
     elseif strcmp(NumberofCompartments, 'two peak')
         pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11182024.xlsx']; %for anomalous diffusion, second submission to MRM
+    %{
     elseif strcmp(NumberofCompartments, 'slow peak')
         pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11272024_sub.xlsx']; %for anomalous diffusion, second submission to MRM
     elseif strcmp(NumberofCompartments, 'med peak')
         pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11272024_med.xlsx']; %for anomalous diffusion, second submission to MRM
     elseif strcmp(NumberofCompartments, 'fast peak')
         pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_11272024_fast.xlsx']; %for anomalous diffusion, second submission to MRM
-
-    else
-        error('please say it is either two peak or three peak, or slow peak, med peak, or fast peak')
-    end
     %}
-
-    if strcmp(NumberofCompartments, 'three peak')
-        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_12172024_3comp.xlsx']; %for anomalous diffusion, second submission to MRM
-    elseif strcmp(NumberofCompartments, 'two peak')
-        pathtoCSV = [pathtodata, '/', 'MultiExpSimulatedCurves_anomalous_12172024_2comp.xlsx']; %for anomalous diffusion, second submission to MRM
+    else
+        error('please say it is either two peak or three peak')
     end
 
-
-
+    
     names = sheetnames( pathtoCSV ) % get all types of simulated data
-    %test = contains(names,'AveragedNoise_anomalous'); %only those with anisotropic noise
-    %names = names(test);
-    test = contains(names, 'AN_A_SNR_50');
-    names=names(test)
+    test = contains(names,'AN_'); %only those with anisotropic noise
+    names = names(test);
     for j=1:length(names) %-1 to avoid the parameters sheet 
         
         DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:M','Sheet', names{j});
@@ -51,7 +41,8 @@ function RunAndSave_AnomalousAnisotropySimulation_9bvals_lambdas(NumberofCompart
             started = ['started: '  + string(datetime("now"))];
             t0 = tic(); %start timer
             % create sheet
-            Header = {'Run Number',	'fast fraction',	'med fraction'	'slow fraction',	'fast diffusion',	'med diffusion',	'slow diffusion',	'rsq', 'number of peaks'};
+            
+            Header = {'Run Number',	'fast fraction',	'med fraction'	'slow fraction', 'fourth fraction',	'fast diffusion',	'med diffusion',	'slow diffusion',	'fourth diffusion', 'rsq', 'number of peaks'};
             writecell(Header,ExcelFileName,'WriteMode','append','Sheet',[ExportSheetName '_s']) %hanged to s to keep under length of 31 charaacters for excel.
             writecell(Header,ExcelFileName,'WriteMode','append','Sheet',ExportSheetName)
         
@@ -91,7 +82,7 @@ end
 
 
 
-%% nested function
+%% nested function NOW NO PEAK SET. CAN BE FOUR!!!!!!! 
 function Run_SpectralFit(RunNum, SignalInput, ExportfileName, ExportSheetName, lambda)
 
     addpath ../../Applied_NNLS_renal_DWI/rNNLS/nwayToolbox
@@ -110,15 +101,15 @@ function Run_SpectralFit(RunNum, SignalInput, ExportfileName, ExportSheetName, l
         if strcmp(lambda, 'Cross Validation')
             [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML(currcurve,b_values);
         else
-            [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_lambda(currcurve,b_values, lambda); %best results so far regarding Mann-Whitney U & AUC
+            [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks_lambda(currcurve,b_values, lambda); %best results so far regarding Mann-Whitney U & AUC
         end
     
         if rsq>0.7
-            rawfracs = resultsPeaks(1:3);
+            rawfracs = resultsPeaks(1:4);
             rawpeaknumber = nnz(rawfracs);
-            dataarray={resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq, rawpeaknumber};
+            dataarray={resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),resultsPeaks(7),resultsPeaks(8),rsq, rawpeaknumber};
             
-
+%{
             % now also sort it!
             dataarray_sorted={resultsPeaks(1),resultsPeaks(2),resultsPeaks(3),resultsPeaks(4),resultsPeaks(5),resultsPeaks(6),rsq, rawpeaknumber};
 
@@ -131,7 +122,8 @@ function Run_SpectralFit(RunNum, SignalInput, ExportfileName, ExportSheetName, l
 
                 dataarray_sorted={resultsPeaks(1),0,newfrac,resultsPeaks(4),0,newdiff,rsq, sortedpeaknumber};
             end
-            
+%}
+            dataarray_sorted={0, 0, 0, 0, 0, 0,rsq, 0};
         else
             dataarray={0, 0, 0, 0, 0, 0,rsq, 0};
             dataarray_sorted={0, 0, 0, 0, 0, 0,rsq, 0};
