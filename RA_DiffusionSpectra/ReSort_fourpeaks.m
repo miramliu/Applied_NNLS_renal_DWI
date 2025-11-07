@@ -463,7 +463,7 @@ function SortedresultsPeaks = ReSort_fourpeaks(resultsPeaks)
                             SortingDone = 1; %sorting is done
                         else %if middle is smaller... but two peaks les than tissue, merge into one fibrosis peak
                             f_fibro = CompartmentFractions(other1_idx) + CompartmentFractions(other2_idx);
-                            weightedDiffs = CompartmentFractions(other1_idx)*CompartmentDiffusion(other1_idx) + CompartmentFractions(other2_idx)*CompartmentDiffusion(other2_idx);
+                            weightedDiffs = CompartmentFractions(other1_idx)*CompartmentDiffusions(other1_idx) + CompartmentFractions(other2_idx)*CompartmentDiffusions(other2_idx);
                             D_fibro = weightedDiffs/(CompartmentFractions(other1_idx) + CompartmentFractions(other2_idx));
                             % make it a 2 peak spectrum
                             SortedresultsPeaks = [0, 0, f_tissue, f_fibro, 0, 0, D_tissue, D_fibro];

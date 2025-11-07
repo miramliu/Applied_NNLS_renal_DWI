@@ -68,7 +68,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
 
     %% with forced regularization of curve
-    lambda = 2;
+    lambda = 8;%0.1;
     [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
     
     
@@ -111,6 +111,7 @@ end
 
 
 % to be able to get the data for the DWI analysis... hopefully.
+%{
 function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
 
@@ -124,7 +125,7 @@ function SignalInput = ReadPatientDWIData(PatientNum, ROItype)
 
     pathtodata = '/Users/miraliu/Desktop/Data/ML_PartialNephrectomy_Export/';
     pathtoCSV = [pathtodata '/' PatientNum '/' PatientNum '_Scan1.csv'];
-%}
+
 
     %read data
     DataFrame = readtable(pathtoCSV,'PreserveVariableNames', true, 'Range','A:E','Delimiter', ',');    
@@ -173,3 +174,4 @@ function SignalInput = ReadPatientDWIData_3mo(PatientNum, ROItype)
     SignalInput = SignalInput./SignalInput(1); %normalize to b0
 
 end
+%}
