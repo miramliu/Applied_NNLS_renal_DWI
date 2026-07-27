@@ -114,6 +114,29 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P099')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P102')
 RA_DiffusionSpec_Voxelwise_fourpeaks('P103')
 
+
+
+
+% final round 
+RA_DiffusionSpec_Voxelwise_fourpeaks('P104')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P105')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P106')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P107')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P108')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P109')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P110')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P111')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P112')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P113')
+RA_DiffusionSpec_Voxelwise_fourpeaks('P114')
+
+
+
+
+
+
+
+
 %% site 2 (cornell)
 %for center 2, change PatientNumb to RA_02 rather than RA_01 in
 %RA_DiffusionSpec_Voxelwise_fourpeaks
@@ -173,6 +196,22 @@ RA_DiffusionSpec_Voxelwise_fourpeaks('P053',2)
 RA_DiffusionSpec_Voxelwise_fourpeaks('P054',2)
 RA_DiffusionSpec_Voxelwise_fourpeaks('P055',2)
 RA_DiffusionSpec_Voxelwise_fourpeaks('P056',2)
+
+
+
+
+
+
+
+% final set
+RA_DiffusionSpec_Voxelwise_fourpeaks('P057',2)
+RA_DiffusionSpec_Voxelwise_fourpeaks('P060',2)
+RA_DiffusionSpec_Voxelwise_fourpeaks('P061',2)
+RA_DiffusionSpec_Voxelwise_fourpeaks('P062',2)
+RA_DiffusionSpec_Voxelwise_fourpeaks('P064',2)
+
+
+
 
 %% healthy volunteers (thank you!!)
 %must change 

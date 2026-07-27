@@ -133,8 +133,8 @@ function AllVoxelsDecay_total = ReadPatientDWIData_voxelwise(varargin)
     pathtodata = '/Users/miraliu/Desktop/Data/RA/Swathi_ROIs/';
     pathtoCSV = [pathtodata '/' PatientNum '_Swathi.csv'];
 %}  
-    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_ALL_2025_07/';
-    pathtoCSV = [pathtodata '/' PatientNum '_IVIM.csv'];
+    pathtodata = "/Users/miraliu/Dropbox/Mira's projects/PostDocData/RA/RenalAllograft_IVIM_ALL_2025_07";
+    pathtoCSV = join([pathtodata '/' PatientNum '_IVIM.csv'],"");
 
         %% for each type, this is Poles
     count = 0;
@@ -232,6 +232,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
 
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted(currcurve);
         %[~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_restricted_both(currcurve);
+
+        %% run fit, and check lambda value in line 71 in RunNNLS_ML_fourpeaks.
         [~, rsq, ~, ~, resultsPeaks] = RunNNLS_ML_fourpeaks(currcurve); %best results so far regarding Mann-Whitney U & AUC
         
         if rsq>0.7 
@@ -383,8 +385,8 @@ function RunAndSave_voxelwise_fourpeaks(PatientNum, ROItype,SignalInput)
     %pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM';
     %ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_CORRECTED.xlsx']; % All results will save in excel file
 %}
-    pathtodata = '/Users/miraliu/Desktop/Data/RA/RenalAllograft_IVIM_ALL_2025_07';
-    ExcelFileName=[pathtodata, '/','RA_DiffusionSpectra_IVIM_ALL_2025_07.xlsx']; % All results will save in excel file
+    pathtodata = "/Users/miraliu/Dropbox/Mira's projects/PostDocData/RA/RenalAllograft_IVIM_ALL_2025_07";
+    ExcelFileName=join([pathtodata, '/','RA_DiffusionSpectra_IVIM_ALL_2026_07.xlsx'],""); % All results will save in excel file
     
 
 %% for Swathi ICC ROIs
