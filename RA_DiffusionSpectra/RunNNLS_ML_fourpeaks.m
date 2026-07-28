@@ -22,10 +22,13 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
             %to match bi-exp, normalizing to b0
             SignalInput = varargin{1};
             SignalInput = SignalInput(:)/SignalInput(1);
+
+            lambda = 8; %% automatically assume 8 unless it's
         else
             SignalInput = varargin{1};
-            b_values = varargin{2};
+            %b_values = varargin{2};
             SignalInput = SignalInput(:)/SignalInput(1);
+            lambda = varargin{2};
         end
     elseif nargin == 3 %have ROI type and new b-values 
         PatientNum = varargin{1};
@@ -38,6 +41,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     else
 
         SignalInput = varargin{1};
+        lambda = 8;
     end
 
     %list_of_b_values = zeros(length(bvalues),max(bvalues));
@@ -68,7 +72,7 @@ function [OutputDiffusionSpectrum, rsq, Resid, y_recon, resultsPeaks] = RunNNLS_
     %[TempAmplitudes, TempResnorm, TempResid ] = NNLS_L2andCurvReg(A, SignalInput, lambda);
 
     %% with forced regularization of curve
-    lambda = 8;%0.1;
+    %lambda = 8;%0.1;
     [TempAmplitudes, TempResnorm, TempResid ] = simpleCVNNLS_curveregularized(A, SignalInput, lambda);
     
     
